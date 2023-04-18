@@ -10,6 +10,7 @@ import com.project.zoopiter.web.common.AttachFileType;
 import com.project.zoopiter.web.common.LoginMember;
 import com.project.zoopiter.web.exception.BizException;
 import com.project.zoopiter.web.form.bbsc.BbscDetailForm;
+import com.project.zoopiter.web.form.bbsc.BbscListForm;
 import com.project.zoopiter.web.form.bbsc.BbscSaveForm;
 import com.project.zoopiter.web.form.bbsc.BbscUpdateForm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -251,7 +252,7 @@ public class BbscController {
     // 게시물 목록 전체
     if(category == null || StringUtils.isEmpty(String.valueOf(cate))){
       String[] arr = {};
-      if(searchType.isPresent()){
+      if(searchType.isPresent()){ //검색어 있음(필터-최신,조회)
         BbscFilterCondition filterCondition = new BbscFilterCondition(
             arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
             searchType.get()
@@ -259,7 +260,7 @@ public class BbscController {
         fc.setTotalRec(bbscSVC.totalCount(filterCondition));
         fc.setSearchType(searchType.get());
         bbscList = bbscSVC.findByFilter(filterCondition);
-      } else if (category.isPresent()) { //검색어 있음
+      } else if (category.isPresent()) { //검색어 있음(펫태그)
         arr = category.get();
         BbscFilterCondition filterCondition2 = new BbscFilterCondition(
             arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
@@ -271,9 +272,21 @@ public class BbscController {
       }else{  //검색어 없음
         // 총레코드수
         fc.setTotalRec(bbscSVC.totalCount());
-        bbscList = bbscSVC.findAll();
+        bbscList = bbscSVC.findAll(fc.getRc().getStartRec(),fc.getRc().getEndRec());
       }
     }
+
+      List<BbscListForm> partOfList = new ArrayList<>();
+      for(Bbsc bbsc : bbscList){
+        BbscListForm listForm = new BbscListForm();
+        BeanUtils.copyProperties(bbsc, listForm);
+        partOfList.add(listForm);
+      }
+
+      model.addAttribute("list",partOfList);
+      model.addAttribute("fc",fc);
+      model.addAttribute("petTag",cate);  
+
     return "board_com/com_main";
   }
 
