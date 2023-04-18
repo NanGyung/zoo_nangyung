@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,7 +38,7 @@ public class BbscController {
   private final UploadFileSVC uploadFileSVC;
 
   @Autowired
-  @Qualifier("fc10") //동일한 타입의 객체가 여러개있을때 빈이름을 명시적으로 지정해서 주입받을때
+//  @Qualifier("fc10") //동일한 타입의 객체가 여러개있을때 빈이름을 명시적으로 지정해서 주입받을때
   private FindCriteria fc;
 
   // 글작성 양식
@@ -285,7 +284,7 @@ public class BbscController {
 
       model.addAttribute("list",partOfList);
       model.addAttribute("fc",fc);
-      model.addAttribute("petTag",cate);  
+      model.addAttribute("petTag",cate);
 
     return "board_com/com_main";
   }

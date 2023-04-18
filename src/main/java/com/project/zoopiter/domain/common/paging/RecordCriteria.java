@@ -1,9 +1,12 @@
 package com.project.zoopiter.domain.common.paging;
 
 import lombok.ToString;
+import org.springframework.stereotype.Component;
 
 
 @ToString
+//@Configuration
+@Component
 public class RecordCriteria {
   private int reqPage = 1;							//요청페이지
   private final int REC_COUNT_PER_PAGE; //한페이지에 보여줄 레코드수
