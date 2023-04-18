@@ -58,6 +58,16 @@ public class BbscDAOImpl implements BbscDAO{
     return list;
   }
 
+  @Override
+  public List<Bbsc> findAll(int startRec, int endRec) {
+    return null;
+  }
+
+  @Override
+  public List<Bbsc> findAll(String[] category, int startRec, int endRec) {
+    return null;
+  }
+
   /**
    * 검색
    * @param filterCondition 펫태그(강아지,고양이,소동물,기타)

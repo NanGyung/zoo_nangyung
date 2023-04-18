@@ -1,7 +1,9 @@
 package com.project.zoopiter.web;
 
+import com.project.zoopiter.domain.bbsc.dao.BbscFilterCondition;
 import com.project.zoopiter.domain.bbsc.svc.BbscSVC;
 import com.project.zoopiter.domain.common.file.svc.UploadFileSVC;
+import com.project.zoopiter.domain.common.paging.FindCriteria;
 import com.project.zoopiter.domain.entity.Bbsc;
 import com.project.zoopiter.domain.entity.UploadFile;
 import com.project.zoopiter.web.common.AttachFileType;
@@ -16,11 +18,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.*;
 
@@ -32,9 +37,9 @@ public class BbscController {
   private final BbscSVC bbscSVC;
   private final UploadFileSVC uploadFileSVC;
 
-//  @Autowired
-//  @Qualifier("fc10") //동일한 타입의 객체가 여러개있을때 빈이름을 명시적으로 지정해서 주입받을때
-//  private FindCriteria fc;
+  @Autowired
+  @Qualifier("fc10") //동일한 타입의 객체가 여러개있을때 빈이름을 명시적으로 지정해서 주입받을때
+  private FindCriteria fc;
 
   // 글작성 양식
   @GetMapping("/add")
@@ -223,49 +228,67 @@ public class BbscController {
   }
 
   // 페이징 구현
-  // searchType: 조회순, 최신순 keyword: 동물태그
-//  @GetMapping({"/list",
-//                "/list/{reqPage}",
-//                "/list/{reqPage}//",
-//                "/list/{reqPage}/{searchType}/{keyword}"})
-//  public String findAll(
-//      @PathVariable(required = false) Optional<Integer> reqPage,
-//      @PathVariable(required = false) Optional<String> searchType,
-//      @PathVariable(required = false) Optional<String> keyword,
-//      @RequestParam(required = false) Optional<String> category,
-//      Model model){
-//    log.info("/list 요청됨{},{},{},{}",reqPage,searchType,keyword,category);
-//
-//    String cate = getCategory(category);
-//
-//    //FindCriteria 값 설정
-//    fc.getRc().setReqPage(reqPage.orElse(1)); //요청페이지, 요청없으면 1
-//    fc.setSearchType(searchType.orElse(""));  //검색유형
-//    fc.setKeyword(keyword.orElse(""));        //검색어
-//
-////    List<Bbsc> bbscList = bbscSVC.findAll();
-//    List<Bbsc> bbscList = null;
-//
-//
-//    List<BbscDetailForm> bbscDetailForms = new ArrayList<>();
-//    bbscList.stream().forEach(bbsc -> {
-//      BbscDetailForm bbscDetailForm = new BbscDetailForm();
-//      bbscDetailForm.setBcContent(bbsc.getBcContent());
-//      bbscDetailForm.setBcHit(bbsc.getBcHit());
-//    });
-//
-//    model.addAttribute("bbscList", bbscList);
-//    if(bbscList.size() == 0){
-//      throw new BizException("등록된 글이 없습니다!");
-//    }
-//    return "board_com/com_main";
-//  }
+  // searchType: 조회순, 최신순 category: 동물태그
+  @GetMapping({"/list",
+                "/list/{reqPage}",
+                "/list/{reqPage}//",
+                "/list/{reqPage}/{searchType}/{keyword}"})
+  public String listAndReqPage(
+      @PathVariable(required = false) Optional<Integer> reqPage,
+      @PathVariable(required = false) Optional<String> searchType,
+      @RequestParam(required = false) Optional<String[]> category,
+      Model model){
+    log.info("/list 요청됨{},{},{},{}",reqPage,searchType,category);
+
+    String[] cate = getCategory(category);  // 펫태그 배열
+
+    //FindCriteria 값 설정
+    fc.getRc().setReqPage(reqPage.orElse(1)); //요청페이지, 요청없으면 1
+    fc.setSearchType(searchType.orElse(""));  //검색유형(조회수,최신순)
+
+    List<Bbsc> bbscList = null;
+
+    // 게시물 목록 전체
+    if(category == null || StringUtils.isEmpty(String.valueOf(cate))){
+      String[] arr = {};
+      if(searchType.isPresent()){
+        BbscFilterCondition filterCondition = new BbscFilterCondition(
+            arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+            searchType.get()
+        );
+        fc.setTotalRec(bbscSVC.totalCount(filterCondition));
+        fc.setSearchType(searchType.get());
+        bbscList = bbscSVC.findByFilter(filterCondition);
+      } else if (category.isPresent()) { //검색어 있음
+        arr = category.get();
+        BbscFilterCondition filterCondition2 = new BbscFilterCondition(
+            arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+            searchType.get()
+        );
+        fc.setTotalRec(bbscSVC.totalCount(filterCondition2));
+        fc.setCategory(category.get());
+        bbscList = bbscSVC.findByPetType(filterCondition2);
+      }else{  //검색어 없음
+        // 총레코드수
+        fc.setTotalRec(bbscSVC.totalCount());
+        bbscList = bbscSVC.findAll();
+      }
+    }
+    return "board_com/com_main";
+  }
 
   //쿼리스트링 카테고리 읽기, 없으면 ""반환
-  private String getCategory(Optional<String> category) {
-    String cate = category.isPresent()? category.get():"";
-    log.info("category={}", cate);
-    return cate;
+  private String[] getCategory(Optional<String[]> category) {
+    String[] result = {};
+    if(category.isPresent()){
+      result = category.get();
+    }else{
+      String[] cate = category.orElse(new String[0]); // 값이 없는 경우 길이가 0인 배열 생성
+      String[] emptyArray = new String[cate.length];
+      result = Arrays.stream(cate).map(x -> "").toArray(String[]::new); // 배열의 모든 요소를 빈 문자열("")로 초기화
+    }
+    log.info("category={}", result);
+    return result;
   }
 
 }
