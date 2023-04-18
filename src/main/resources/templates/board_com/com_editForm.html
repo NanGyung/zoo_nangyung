@@ -55,10 +55,10 @@
         <div class="title__name">
           <div class="main">커뮤니티 글작성</div>
           <div class="title__inline">
-            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open1" value="Y" class="radio" /><span
-              class="ml_10">공개</span>&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open2" value="N" class="radio" /><span
-              class="ml_10">비공개</span>&nbsp;
+            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open1" value="Y" class="radio" />
+            <label for="cs_open1" class="ml_10">공개</label>
+            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open2" value="N" class="radio" />
+            <label for="cs_open2" class="ml_10">비공개</label>
           </div>
         </div>
       </div>
@@ -129,8 +129,6 @@
 <script src="/js/hambuger.js"></script>
 <!-- footer 개인정보처리방침 모달 구현 -->
 <script src="/js/ft_modal.js"></script>
-<!-- 펫 태그 체크박스 이벤트  -->
-<script src="/js/board_checkPet.js"></script>
 <!-- 등록 구현 -->
 <script src="/js/board_editForm.js"></script>
 

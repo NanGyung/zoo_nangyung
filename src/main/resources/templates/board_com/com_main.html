@@ -110,7 +110,7 @@
                     <!-- <i class="fa-solid fa-heart"></i> -->
                   </div>
                 </div>
-                <div class="tag" th:text="${Bbsc.petType}">#강아지</div>
+                <div class="tag" th:if="${not #strings.isEmpty(Bbsc.petType)}" th:text="${Bbsc.petType}">#강아지</div>
               </div>
             </div>
             <div class="preview">

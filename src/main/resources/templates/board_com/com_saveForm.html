@@ -55,10 +55,10 @@
         <div class="title__name">
           <div class="main">커뮤니티 글작성</div>
           <div class="title__inline">
-            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open1" value="Y" class="radio" /><span
-              class="ml_10">공개</span>&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open2" value="N" class="radio" /><span
-              class="ml_10">비공개</span>&nbsp;
+            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open1" value="Y" class="radio" />
+            <label for="cs_open1" class="ml_10">공개</label>
+            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open2" value="N" class="radio" />
+            <label for="cs_open2" class="ml_10">비공개</label>
           </div>
         </div>
       </div>
@@ -109,7 +109,7 @@
         <div class="btn-l"></div>
         <div class="btn">
           <div class="detail">
-            <button th:onclick="|location.href='@{/bbsc/list}'|">목록</button>
+            <button type="button" th:onclick="|location.href='@{/bbsc/list}'|">목록</button>
           </div>
           <div class="add">
             <button id="addBtn" type="submit">등록</button>
@@ -132,8 +132,6 @@
     <!-- 광고 문의 -->
     <th:block th:replace="~{fragment/footer::ft-modal3}"></th:block>
   </div>
-  <!-- 펫 태그 체크박스 이벤트  -->
-  <script src="/js/board_checkPet.js"></script>
   <script>
   const add_h = e => {
     e.preventDefault();

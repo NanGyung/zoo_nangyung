@@ -225,7 +225,7 @@ p {
   font-weight: bold;
   padding: 5px 20px;
   border-radius: 10px;
-  color: black;
+  color: var(--color-main-text);
   border: 2px solid #f26d3d;
 }
 .btn .btn__che .btn__btn .modi button {
@@ -234,7 +234,7 @@ p {
   font-weight: bold;
   padding: 5px 20px;
   border-radius: 10px;
-  color: black;
+  color: var(--color-main-text);
   border: 2px solid #f26d3d;
   margin-left: 10px;
 }
@@ -250,7 +250,7 @@ p {
   font-weight: bold;
   padding: 5px 20px;
   border-radius: 10px;
-  color: black;
+  color: var(--color-main-text);
   border: 2px solid #f26d3d;
   margin-left: 10px;
 }
