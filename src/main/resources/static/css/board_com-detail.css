@@ -238,6 +238,12 @@ p {
   border: 2px solid #f26d3d;
   margin-left: 10px;
 }
+
+.modi a{
+  display: inline-block;
+  width: 100%;
+}
+
 .btn .btn__che .btn__btn .del button {
   background-color: #ffd65f;
   font-size: 15px;

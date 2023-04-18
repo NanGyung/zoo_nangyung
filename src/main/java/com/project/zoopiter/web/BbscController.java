@@ -9,11 +9,13 @@ import com.project.zoopiter.web.common.LoginMember;
 import com.project.zoopiter.web.exception.BizException;
 import com.project.zoopiter.web.form.bbsc.BbscDetailForm;
 import com.project.zoopiter.web.form.bbsc.BbscSaveForm;
+import com.project.zoopiter.web.form.bbsc.BbscUpdateForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -117,9 +119,70 @@ public class BbscController {
     return "board_com/com_detailForm";
   }
 
-  // 수정
+  // 수정양식
+  @GetMapping("/{bbscId}/edit")
+  public String updateForm(
+      @PathVariable Long bbscId,
+      Model model
+  ){
+    Optional<Bbsc> findedItem = bbscSVC.findById(bbscId);
+    Bbsc bbsc = findedItem.orElseThrow();
+
+    BbscUpdateForm bbscUpdateForm = new BbscUpdateForm();
+    BeanUtils.copyProperties(bbsc,bbscUpdateForm);
+    model.addAttribute("bbscUpdateForm",bbscUpdateForm);
+
+    //첨부파일조회
+    List<UploadFile> imagedFiles = uploadFileSVC.findFilesByCodeWithRid(AttachFileType.F0102, bbscId);
+    if(imagedFiles.size() > 0){
+      log.info("ImagedFiles={}",imagedFiles);
+      model.addAttribute("imagedFiles",imagedFiles);
+    }
+    model.addAttribute("bbscId",bbscId);
+
+    return "board_com/com_editForm";
+  }
+
+  // 수정처리
+  @PostMapping("/{bbscId}/edit")
+  public String update(
+      @PathVariable Long bbscId,
+      @Valid @ModelAttribute BbscUpdateForm bbscUpdateForm,
+      BindingResult bindingResult,
+      RedirectAttributes redirectAttributes
+  ){
+    // 데이터 검증
+    if(bindingResult.hasErrors()){
+      log.info("bindingResult={}",bindingResult);
+      return "board_com/com_editForm";
+    }
+
+    // 정상처리
+    Bbsc bbsc = new Bbsc();
+    BeanUtils.copyProperties(bbscUpdateForm,bbsc);
+    bbscSVC.update(bbscId, bbsc);
+
+    // 파일첨부
+    List<UploadFile> imageFiles = uploadFileSVC.convert(bbscUpdateForm.getImageFiles(),AttachFileType.F0102);
+
+    if(bbscUpdateForm.getImageFiles().size() == 0){
+      bbscSVC.update(bbscId, bbsc);
+    }else{
+      bbscSVC.update(bbscId, bbsc, imageFiles);
+    }
+
+    redirectAttributes.addAttribute("bbscId",bbscId);
+
+    return "redirect:/bbsc/{bbscId}/detail";
+  }
 
   // 삭제
+  @GetMapping("/{bbscId}/del")
+  public String deleteById(@PathVariable Long bbscId){
+    bbscSVC.delete(bbscId,AttachFileType.F0102);
+    return "redirect:/bbsc/list";
+  }
+
 
 
   //목록

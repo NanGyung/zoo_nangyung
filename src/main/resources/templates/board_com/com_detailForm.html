@@ -27,8 +27,8 @@
 
     <div class="mn-l"></div>
     <main class="container">
-      <form action="" th:object="${bbscDetailForm}">
-<!--        <p id="bbscId" th:field="*{bbscId}" th:text="*{bbscId}"></p>-->
+      <form action="" method="post" th:object="${bbscDetailForm}">
+        <input id="bbscId" th:field="*{bbscId}" style="display: none;">
         <!-- 메인 컨텐츠 -->
         <!-- 첫줄 동물태그 -->
         <div class="tag-l"></div>
@@ -105,10 +105,10 @@
               <!-- 글작성자와 세션아이디체크해서 동일한경우만 수행 -->
               <th:block th:if="*{userNick} == ${session.loginMember.userNick}">
                 <div class="modi">
-                  <button onclick="location.href='board_com-edit.html'">수정</button>
+                    <button type="button" id="modifyBtn">수정</button>
                 </div>
                 <div class="del">
-                  <button class="openBtn">삭제</button>
+                  <button type="button" id="delBtn" class="openBtn">삭제</button>
                 </div>
               </th:block>
             <!--     게시글 삭제 모달      -->
@@ -209,15 +209,13 @@
   </div>
 
   <!-- 햄버거 메뉴 구현 -->
-  <script src="../js/hambuger.js"></script>
+  <script src="/js/hambuger.js"></script>
   <!-- footer 개인정보처리방침 모달 구현 -->
-  <script src="../js/ft_modal.js"></script>
+  <script src="/js/ft_modal.js"></script>
   <!-- 동물 태그 선택 구현 -->
-  <script src="../js/review.js"></script>
-  <!-- 작성날짜 -->
-  <script src="../js/clock.js"></script>
-  <!-- 취소,삭제 모달 구현 -->
-  <script src="../js/board_del_modal.js"></script>
+  <script src="/js/review.js"></script>
+  <!-- 수정, 삭제 버튼 이벤트 -->
+  <script src="/js/detailForm.js"></script>
 
 </body>
 
