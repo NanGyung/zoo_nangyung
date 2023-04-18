@@ -68,7 +68,7 @@
           <div class="nick__info">
             <div class="nick__date">
               <div class="re1" th:field="*{userNick}" th:text="*{userNick}">닉네임</div>
-              <div id="re1" th:field="*{bcCdate}" th:text="*{bcCdate}" style="color: black; font-size: 12px">clock</div>
+              <div id="re1" th:field="*{bcUdate}" th:text="*{bcUdate}" style="color: black; font-size: 12px">clock</div>
             </div>
           </div>
         </div>
@@ -79,11 +79,13 @@
         <div class="content-l"></div>
         <div class="content">
           <div class="content__view">
+            <div class="content__view-imgs">
               <div th:each="file : ${imagedFiles}" class="view__img">
                 <th:block th:if="${#strings.contains(file.ftype,'image')}">
                   <img th:src="@{|/attach/view/${file.uploadfileId}|}" >
                 </th:block>
               </div>
+            </div>
             <p th:field="*{bcContent}" th:text="*{bcContent}">
               샘플 본문
             </p>

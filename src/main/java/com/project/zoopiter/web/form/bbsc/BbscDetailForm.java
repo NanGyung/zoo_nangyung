@@ -14,7 +14,8 @@ public class BbscDetailForm {
   private String petType;   // 반려동물 품종
   private Long bcHit;       // 조회수
   private Long bcLike;      // 좋아요수
+  private String bcPublic;  // 글공개 유무
   private String userNick;   // 일반회원 닉네임
-  private LocalDateTime bcCdate;  // 작성일
+  private LocalDateTime bcUdate;  // 수정일
   private List<UploadFile> imagedFiles;
 }

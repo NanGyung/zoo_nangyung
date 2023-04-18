@@ -84,8 +84,8 @@
       <div class="main-nick-l"></div>
       <div class="main-nick">
         <!-- 게시글 -->
-        <th:block th:each="Bbsc : ${bbscList}">
-          <div class="post" th:onclick="|location.href='@{/bbsc/{id}/detail(id=${Bbsc.bbscId})}'|">
+        <th:block th:each="Bbsc : ${bbscList}" >
+          <div class="post" th:if="${Bbsc.bcPublic} == 'Y'" th:onclick="|location.href='@{/bbsc/{id}/detail(id=${Bbsc.bbscId})}'|">
             <div class="info">
               <div class="pro">
                 <div class="img">

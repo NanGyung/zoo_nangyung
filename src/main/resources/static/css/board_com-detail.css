@@ -126,6 +126,11 @@ p {
   margin-inline: 10px;
 }
 
+.content__view-imgs {
+
+   display: flex;
+}
+
 /* 조회,좋아요 */
 .main-title .sub {
   display: flex;

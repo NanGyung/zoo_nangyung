@@ -102,7 +102,7 @@ public class BbscController {
     bbscDetailForm.setBcHit(bbsc.getBcHit());
     bbscDetailForm.setPetType(bbsc.getPetType());
     bbscDetailForm.setUserNick(bbsc.getUserNick());
-    bbscDetailForm.setBcCdate(bbsc.getBcCdate());
+    bbscDetailForm.setBcUdate(bbsc.getBcUdate());
 
 
     //첨부파일조회
@@ -193,6 +193,8 @@ public class BbscController {
         BbscDetailForm bbscDetailForm = new BbscDetailForm();
         bbscDetailForm.setBcContent(bbsc.getBcContent());
         bbscDetailForm.setBcHit(bbsc.getBcHit());
+        bbscDetailForm.setBcPublic(bbsc.getBcPublic());
+        bbscDetailForm.setBcUdate(bbsc.getBcUdate());
       });
 
     model.addAttribute("bbscList", bbscList);
