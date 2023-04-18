@@ -25,11 +25,12 @@ class BbscDAOImplTest {
     int size = bbscDAO.findAll().size();
     int i = bbscDAO.totalCount();
     Assertions.assertThat(i).isEqualTo(size);
+    log.info("cnt={}",i);
   }
 
   @Test
-  @DisplayName("게시글 건수-펫태그")
-  void testTotalCount() {
+  @DisplayName("펫태그 검색")
+  void findbyPetTypes() {
     String[] arr= {"기타","소동물"};
     BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 5, "");
     List<Bbsc> byPetType = bbscDAO.findByPetType(filterCondition);
@@ -37,6 +38,27 @@ class BbscDAOImplTest {
   }
 
   @Test
-  void testTotalCount1() {
+  @DisplayName("펫태그 게시글 건수")
+  void totalCountByPetType() {
+    String[] arr= {"기타","소동물"};
+    BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 5, "");
+    int cntOfFindedPetType = bbscDAO.totalCount(filterCondition);
+    log.info("cntOfFindedPetType={}",cntOfFindedPetType);
+  }
+
+  @Test
+  @DisplayName("필터 검색")
+  void findByFilter(){
+    String[] arr= {};
+    String filter1 = "bcHit";
+    String filter2 = "bcUdate";
+    BbscFilterCondition bcHit = new BbscFilterCondition(arr, 1, 5, filter1);
+    BbscFilterCondition bcUdate = new BbscFilterCondition(arr, 1, 5, filter2);
+
+    List<Bbsc> findByBchit = bbscDAO.findByFilter(bcHit);
+    List<Bbsc> findByBcudate = bbscDAO.findByFilter(bcUdate);
+
+    log.info("findByBchit={}",findByBchit);
+    log.info("findByBcudate={}",findByBcudate);
   }
 }

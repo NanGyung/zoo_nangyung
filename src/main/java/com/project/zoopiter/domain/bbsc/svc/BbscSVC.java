@@ -32,6 +32,13 @@ public interface BbscSVC {
    */
   List<Bbsc> findByPetType(BbscFilterCondition filterCondition);
 
+  /**
+   * 필터 검색
+   * @param filterCondition 조회수, 최신순, 좋아요
+   * @return
+   */
+  List<Bbsc> findByFilter(BbscFilterCondition filterCondition);
+
 
   /**
    * 조회
@@ -92,7 +99,7 @@ public interface BbscSVC {
    * @return 게시글 전체건수
    */
   int totalCount();
-  int totalCount(String petType);
+
   int totalCount(BbscFilterCondition filterCondition);
 
 }

@@ -27,6 +27,13 @@ public interface BbscDAO {
   List<Bbsc> findByPetType(BbscFilterCondition filterCondition);
 
   /**
+   * 필터 검색
+   * @param filterCondition 조회수, 최신순, 좋아요
+   * @return
+   */
+  List<Bbsc> findByFilter(BbscFilterCondition filterCondition);
+
+  /**
    * 상세조회
    * @param id 게시글 번호
    * @return
@@ -61,7 +68,12 @@ public interface BbscDAO {
    * @return 게시글 전체건수
    */
   int totalCount();
-  int totalCount(String petType);
+
+  /**
+   * 필터별 건수
+   * @param filterCondition
+   * @return
+   */
   int totalCount(BbscFilterCondition filterCondition);
 
 }

@@ -161,6 +161,17 @@ public class BbscSVCImpl implements BbscSVC{
   }
 
   /**
+   * 필터 검색
+   *
+   * @param filterCondition 조회수, 최신순, 좋아요
+   * @return
+   */
+  @Override
+  public List<Bbsc> findByFilter(BbscFilterCondition filterCondition) {
+    return bbscDAO.findByFilter(filterCondition);
+  }
+
+  /**
    * 전체건수
    *
    * @return 게시글 전체건수
@@ -168,11 +179,6 @@ public class BbscSVCImpl implements BbscSVC{
   @Override
   public int totalCount() {
     return bbscDAO.totalCount();
-  }
-
-  @Override
-  public int totalCount(String petType) {
-    return bbscDAO.totalCount(petType);
   }
 
   @Override

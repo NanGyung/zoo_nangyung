@@ -77,9 +77,28 @@ public class BbscDAOImpl implements BbscDAO{
     return list;
   }
 
+  /**
+   * 필터 검색
+   *
+   * @param filterCondition 조회수, 최신순, 좋아요
+   * @return
+   */
+  @Override
+  public List<Bbsc> findByFilter(BbscFilterCondition filterCondition) {
+    StringBuffer sql = new StringBuffer();
+    sql.append("select * from bbsc order by ");
+    sql = dynamicQuery(filterCondition, sql);
+
+    List<Bbsc> list = null;
+
+    list = template.query(sql.toString(),new BeanPropertyRowMapper<>(Bbsc.class));
+
+    return list;
+  }
+
   private StringBuffer dynamicQuery(BbscFilterCondition filterCondition, StringBuffer sql){
     String[] petTypes = filterCondition.getCategory();
-    if(petTypes.length >= 0){
+    if(petTypes.length > 0){
       for(int i = 0; i < petTypes.length; i++){
         sql.append(" '" + petTypes[i] + "' ");
         if(i != petTypes.length - 1){
@@ -87,6 +106,13 @@ public class BbscDAOImpl implements BbscDAO{
         }
       }
         sql.append(" ) ");
+    }
+
+    String searchType = filterCondition.getSearchType();
+    if(searchType == "bcHit"){
+      sql.append("bc_hit desc ");
+    }else if(searchType == "bcUdate"){
+      sql.append("bc_udate desc ");
     }
     return sql;
   }
@@ -184,21 +210,13 @@ public class BbscDAOImpl implements BbscDAO{
   }
 
   @Override
-  public int totalCount(String petType) {
-    String sql = "select count(*) from bbsc where pet_type = :petType ";
-    Map<String,String> param = Map.of("petType",petType);
-
-    Integer cnt = template.queryForObject(sql, param, Integer.class);
-
-    return cnt;
-  }
-
-  @Override
   public int totalCount(BbscFilterCondition filterCondition) {
     StringBuffer sql = new StringBuffer();
-    sql.append("select count(*) from bbsc where ");
+    sql.append("select count(*) from bbsc where pet_type in ( ");
+    sql = dynamicQuery(filterCondition, sql);
+    SqlParameterSource param = new EmptySqlParameterSource();
+    Integer cntOfFindedBypetType = template.queryForObject(sql.toString(), param, Integer.class);
 
-
-    return 0;
+    return cntOfFindedBypetType;
   }
 }
