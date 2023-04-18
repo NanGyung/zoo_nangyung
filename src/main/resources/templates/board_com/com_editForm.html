@@ -36,13 +36,13 @@
           <div class="left">
             <div class="tag">동물태그</div>
             <form class="selectBox" name="petTag" th:field="*{petType}">
-              <input type="checkbox" id="dog" name="dog" value="강아지">
+              <input th:field="*{petType}" type="radio" id="dog" name="dog" value="강아지">
               <label for="dog" >강아지</label>
-              <input type="checkbox" id="cat" name="cat" value="고양이">
+              <input th:field="*{petType}" type="radio" id="cat" name="cat" value="고양이">
               <label for="cat">고양이</label>
-              <input type="checkbox"  id="small" name="small" value="소동물">
+              <input th:field="*{petType}" type="radio"  id="small" name="small" value="소동물">
               <label for="small">소동물</label>
-              <input type="checkbox" id="other" name="other" value="기타">
+              <input th:field="*{petType}" type="radio" id="other" name="other" value="기타">
               <label for="other" >기타</label>
             </form>
           </div>
