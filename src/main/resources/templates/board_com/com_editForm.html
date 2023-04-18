@@ -31,21 +31,19 @@
     <main class="container">
       <div class="sort">
         <div class="search">
-          <div class="tag-list"></div>
+<!--          <div class="tag-list"></div>-->
           <!-- 동물 태그 선택 -->
           <div class="left">
             <div class="tag">동물태그</div>
-            <form class="selectBox" name="petTag">
-              <select class="select" name="pet" th:field="*{petType}">
-                <option value="동물유형">동물유형</option>
-                <option value="강아지">강아지</option>
-                <option value="고양이">고양이</option>
-                <option value="소동물">소동물</option>
-                <option value="기타">기타</option>
-              </select>
-              <span class="icoArrow">
-                  <i class="fa-solid fa-arrow-down"></i>
-                </span>
+            <form class="selectBox" name="petTag" th:field="*{petType}">
+              <input type="checkbox" id="dog" name="dog" value="강아지">
+              <label for="dog" >강아지</label>
+              <input type="checkbox" id="cat" name="cat" value="고양이">
+              <label for="cat">고양이</label>
+              <input type="checkbox"  id="small" name="small" value="소동물">
+              <label for="small">소동물</label>
+              <input type="checkbox" id="other" name="other" value="기타">
+              <label for="other" >기타</label>
             </form>
           </div>
         </div>
@@ -57,9 +55,9 @@
         <div class="title__name">
           <div class="main">커뮤니티 글작성</div>
           <div class="title__inline">
-            <input type="radio" th:field="*{bcPublic}" name="cs_open1" id="cs_open1" value="Y" class="radio" /><span
+            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open1" value="Y" class="radio" /><span
               class="ml_10">공개</span>&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" th:field="*{bcPublic}" name="cs_open2" id="cs_open2" value="N" class="radio" /><span
+            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open2" value="N" class="radio" /><span
               class="ml_10">비공개</span>&nbsp;
           </div>
         </div>
@@ -131,10 +129,10 @@
 <script src="/js/hambuger.js"></script>
 <!-- footer 개인정보처리방침 모달 구현 -->
 <script src="/js/ft_modal.js"></script>
-<!-- 동물 태그 선택 구현 -->
-<script src="/js/board_selectPet.js"></script>
+<!-- 펫 태그 체크박스 이벤트  -->
+<script src="/js/board_checkPet.js"></script>
 <!-- 등록 구현 -->
-<script src="/js/editForm.js"></script>
+<script src="/js/board_editForm.js"></script>
 
 
 </body>

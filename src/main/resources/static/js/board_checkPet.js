@@ -1,4 +1,4 @@
-import { ajax } from '/js/ajax.js';
+//import { ajax } from '/js/ajax.js';
 
 
 // 동물 태그 체크박스 이벤트
@@ -69,6 +69,6 @@ const sendValues_h = e => {
 
 }
 
-$selectBox.addEventListener('change', checkbox_h, false);
-checkBtn.addEventListener('click',sendValues_h,false);
+//$selectBox.addEventListener('change', checkbox_h, false);
+//checkBtn.addEventListener('click',sendValues_h,false);
 

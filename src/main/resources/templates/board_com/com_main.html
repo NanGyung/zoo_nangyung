@@ -52,11 +52,15 @@
           <!-- 동물 태그 선택 -->
           <div class="left">
             <div class="tag">동물태그</div>
-            <form class="selectBox" name="petTag">
-              <input type="checkbox" name="dog" value="강아지"> 강아지
-              <input type="checkbox" name="cat" value="고양이"> 고양이
-              <input type="checkbox" name="small" value="소동물"> 소동물
-              <input type="checkbox" name="other" value="기타"> 기타
+            <form th:field="*{petType}" class="selectBox" name="petTag">
+              <input type="checkbox" id="dog" name="dog" value="강아지">
+              <label for="dog" >강아지</label>
+              <input type="checkbox" id="cat" name="cat" value="고양이">
+              <label for="cat">고양이</label>
+              <input type="checkbox"  id="small" name="small" value="소동물">
+              <label for="small">소동물</label>
+              <input type="checkbox" id="other" name="other" value="기타">
+              <label for="other" >기타</label>
               <button id="checkBtn" type="button">적용</button>
             </form>
           </div>
@@ -110,20 +114,11 @@
               </div>
             </div>
             <div class="preview">
-<!--              <div th:if="${#maps.containsKey(imagedFileMap, Bbsc.bbscId)}" th:text="이미지"></div>-->
-              <img th:if="${#maps.containsKey(imagedFileMap, Bbsc.bbscId)}" th:src="@{|/attach/view/${imagedFileMap[Bbsc.bbscId]}|}">
-
               <div class="img">
-<!--                <div th:each="file : ${imagedFiles}" class="view__img">-->
-<!--                  &lt;!&ndash;        이미지가 있는 경우         &ndash;&gt;-->
-<!--                  <th:block th:if="${#strings.contains(file.ftype,'image')}">-->
-<!--                    <img th:src="@{|/attach/view/${file.rid}|}">-->
-<!--                  </th:block>-->
-<!--                    &lt;!&ndash;      기본이미지        &ndash;&gt;-->
-<!--                  <th:block th:if="${not #strings.contains(file.ftype,'image')}">-->
-<!--                    <i class="fa-solid fa-shield-cat"></i>-->
-<!--                  </th:block>-->
-<!--                </div>-->
+                <!-- 첨부된 이미지가 있는 경우  -->
+                <img th:if="${#maps.containsKey(imagedFileMap, Bbsc.bbscId)}" th:src="@{|/attach/view/${imagedFileMap[Bbsc.bbscId]}|}">
+                <!-- 기본이미지 -->
+                <i th:if="${not #maps.containsKey(imagedFileMap, Bbsc.bbscId)}" class="fa-solid fa-shield-cat"></i>
               </div>
               <div class="review">
                 <div class="hos" th:text="${Bbsc.bcTitle}">슬기로운 커뮤니티</div>
@@ -176,19 +171,14 @@
     <th:block th:replace="~{fragment/footer::ft-modal3}"></th:block>
   </div>
 
-
-
   <!-- 햄버거 메뉴 구현 -->
-  <script src="../js/hambuger.js"></script>
+  <script src="/js/hambuger.js"></script>
   <!-- footer 개인정보처리방침 모달 구현 -->
-  <script src="../js/ft_modal.js"></script>
-  <!-- 동물 태그 선택 구현 -->
-  <script src="../js/board_checkPet.js" type="module"></script>
+  <script src="/js/ft_modal.js"></script>
   <!-- 좋아요 버튼 구현 -->
-  <script src="../js/board_likeBtn.js"></script>
-  <!-- 작성날짜 -->
-<!--  <script src="../js/clock.js"></script>-->
-
+  <script src="/js/board_likeBtn.js"></script>
+  <!-- 펫 태그 체크박스 이벤트  -->
+  <script src="/js/board_checkPet.js"></script>
 </body>
 
 </html>

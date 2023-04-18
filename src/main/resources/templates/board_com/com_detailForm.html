@@ -81,7 +81,7 @@
           <div class="content__view">
               <div th:each="file : ${imagedFiles}" class="view__img">
                 <th:block th:if="${#strings.contains(file.ftype,'image')}">
-                  <img th:src="@{|/attach/view/${file.rid}|}" >
+                  <img th:src="@{|/attach/view/${file.uploadfileId}|}" >
                 </th:block>
               </div>
             <p th:field="*{bcContent}" th:text="*{bcContent}">
@@ -212,10 +212,10 @@
   <script src="/js/hambuger.js"></script>
   <!-- footer 개인정보처리방침 모달 구현 -->
   <script src="/js/ft_modal.js"></script>
-  <!-- 동물 태그 선택 구현 -->
-  <script src="/js/review.js"></script>
+  <!-- 좋아요 구현 -->
+  <script src="/js/board_likeBtn.js"></script>
   <!-- 수정, 삭제 버튼 이벤트 -->
-  <script src="/js/detailForm.js"></script>
+  <script src="/js/board_detailForm.js" charset='euc-kr'></script>
 
 </body>
 

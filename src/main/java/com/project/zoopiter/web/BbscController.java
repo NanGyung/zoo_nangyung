@@ -200,11 +200,13 @@ public class BbscController {
       throw new BizException("등록된 글이 없습니다!");
     }
 
+    // 게시글 id 값들 list에 저장
     List<Long> bbscIdList = new ArrayList<>();
     for (Bbsc bbsc : bbscList) {
       bbscIdList.add(bbsc.getBbscId());
     }
 
+    // key: 게시글 id value: 첨부파일 id로 맵에 저장
     Map<Long, Long> map = new LinkedHashMap<>();
     for (Long bbscId : bbscIdList) {
       List<UploadFile> imagedFiles = uploadFileSVC.findFilesByCodeWithRid(AttachFileType.F0102, bbscId);
