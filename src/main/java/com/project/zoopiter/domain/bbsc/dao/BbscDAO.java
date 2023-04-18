@@ -19,7 +19,7 @@ public interface BbscDAO {
    */
   List<Bbsc> findAll();
   List<Bbsc> findAll(int startRec, int endRec);
-  List<Bbsc> findAll(String[] category, int startRec, int endRec);
+  List<Bbsc> findAll(BbscFilterCondition filterCondition, int startRec, int endRec);
 
   /**
    * 검색

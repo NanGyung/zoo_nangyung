@@ -60,12 +60,56 @@ public class BbscDAOImpl implements BbscDAO{
 
   @Override
   public List<Bbsc> findAll(int startRec, int endRec) {
-    return null;
+    StringBuffer sql = new StringBuffer();
+    sql.append("select t1.*");
+    sql.append("from (select row_number()over(order by bc_udate desc)no,");
+        sql.append("bbsc_id,");
+        sql.append("bc_title,");
+        sql.append("bc_content,");
+        sql.append("pet_type,");
+        sql.append("bc_hit,");
+        sql.append("bc_like,");
+        sql.append("bc_public,");
+        sql.append("bc_cdate,");
+        sql.append("bc_udate");
+        sql.append("from bbsc)t1");
+    sql.append("where t1.no between :startRc and :endRc");
+
+    SqlParameterSource param = new MapSqlParameterSource()
+        .addValue("startRc", startRec)
+        .addValue("endRc", endRec);
+
+    List<Bbsc> list = template.query(sql.toString(), param, new BeanPropertyRowMapper<>(Bbsc.class));
+    return list;
   }
 
   @Override
-  public List<Bbsc> findAll(String[] category, int startRec, int endRec) {
-    return null;
+  public List<Bbsc> findAll(BbscFilterCondition filterCondition, int startRec, int endRec) {
+    StringBuffer sql = new StringBuffer();
+    sql.append("select t1.*");
+    sql.append("from (");
+        sql.append("select row_number()over(order by bc_udate desc)no,");
+        sql.append("bbsc_id,");
+        sql.append("bc_title,");
+        sql.append("bc_content,");
+        sql.append("pet_type,");
+        sql.append("bc_hit,");
+        sql.append("bc_like,");
+        sql.append("bc_public,");
+        sql.append("bc_cdate,");
+        sql.append("bc_udate");
+        sql.append("from bbsc");
+        sql.append("where pet_type in ( ");
+        sql = dynamicQuery(filterCondition,sql);
+        sql.append(")t1");
+        sql.append("where t1.no between :startRc and :endRc");
+
+    SqlParameterSource param = new MapSqlParameterSource()
+        .addValue("startRc", startRec)
+        .addValue("endRc", endRec);
+
+    List<Bbsc> list = template.query(sql.toString(), param, new BeanPropertyRowMapper<>(Bbsc.class));
+    return list;
   }
 
   /**
