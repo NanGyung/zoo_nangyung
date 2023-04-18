@@ -60,19 +60,35 @@ public class BbscDAOImpl implements BbscDAO{
 
   /**
    * 검색
-   * @param petType 펫태그(강아지,고양이,소동물,기타)
+   * @param filterCondition 펫태그(강아지,고양이,소동물,기타)
    * @return
    */
   @Override
-  public List<Bbsc> findByPetType(String petType) {
+  public List<Bbsc> findByPetType(BbscFilterCondition filterCondition) {
     StringBuffer sql = new StringBuffer();
-    sql.append("select * from bbsc where pet_type = :petType ");
+    sql.append("select * from bbsc where pet_type in ( ");
+    sql = dynamicQuery(filterCondition, sql);
 
-    Map<String, String> param = Map.of("petType", petType);
+    List<Bbsc> list = null;
 
-    List<Bbsc> findLists = template.query(sql.toString(), param, new BeanPropertyRowMapper<>(Bbsc.class));
+    list =template.query(sql.toString(), new BeanPropertyRowMapper<>(Bbsc.class));
 
-    return findLists;
+
+    return list;
+  }
+
+  private StringBuffer dynamicQuery(BbscFilterCondition filterCondition, StringBuffer sql){
+    String[] petTypes = filterCondition.getCategory();
+    if(petTypes.length >= 0){
+      for(int i = 0; i < petTypes.length; i++){
+        sql.append(" '" + petTypes[i] + "' ");
+        if(i != petTypes.length - 1){
+          sql.append(", ");
+        }
+      }
+        sql.append(" ) ");
+    }
+    return sql;
   }
 
   /**

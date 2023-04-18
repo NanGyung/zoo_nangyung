@@ -21,10 +21,10 @@ public interface BbscDAO {
 
   /**
    * 검색
-   * @param petType 펫태그(강아지,고양이,소동물,기타)
+   * @param filterCondition 펫태그(강아지,고양이,소동물,기타)
    * @return
    */
-  List<Bbsc> findByPetType(String petType);
+  List<Bbsc> findByPetType(BbscFilterCondition filterCondition);
 
   /**
    * 상세조회

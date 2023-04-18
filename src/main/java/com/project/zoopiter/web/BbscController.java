@@ -223,6 +223,7 @@ public class BbscController {
   }
 
   // 페이징 구현
+  // searchType: 조회순, 최신순 keyword: 동물태그
 //  @GetMapping({"/list",
 //                "/list/{reqPage}",
 //                "/list/{reqPage}//",

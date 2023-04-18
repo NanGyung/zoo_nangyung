@@ -1,6 +1,7 @@
 package com.project.zoopiter.domain.bbsc.svc;
 
 import com.project.zoopiter.domain.bbsc.dao.BbscDAO;
+import com.project.zoopiter.domain.bbsc.dao.BbscFilterCondition;
 import com.project.zoopiter.domain.common.file.svc.UploadFileSVC;
 import com.project.zoopiter.domain.entity.Bbsc;
 import com.project.zoopiter.domain.entity.UploadFile;
@@ -151,11 +152,31 @@ public class BbscSVCImpl implements BbscSVC{
   /**
    * 검색
    *
-   * @param petType 펫태그(강아지,고양이,소동물,기타)
+   * @param filterCondition 펫태그(강아지,고양이,소동물,기타)
    * @return
    */
   @Override
-  public List<Bbsc> findByPetType(String petType) {
-    return bbscDAO.findByPetType(petType);
+  public List<Bbsc> findByPetType(BbscFilterCondition filterCondition) {
+    return bbscDAO.findByPetType(filterCondition);
+  }
+
+  /**
+   * 전체건수
+   *
+   * @return 게시글 전체건수
+   */
+  @Override
+  public int totalCount() {
+    return bbscDAO.totalCount();
+  }
+
+  @Override
+  public int totalCount(String petType) {
+    return bbscDAO.totalCount(petType);
+  }
+
+  @Override
+  public int totalCount(BbscFilterCondition filterCondition) {
+    return bbscDAO.totalCount(filterCondition);
   }
 }

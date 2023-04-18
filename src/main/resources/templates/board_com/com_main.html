@@ -84,9 +84,10 @@
       <div class="main-nick-l"></div>
       <div class="main-nick">
         <!-- 게시글 -->
-        <th:block th:each="Bbsc : ${bbscList}"  >
+        <th:block th:each="Bbsc : ${bbscList}">
           <input type="text" id="bbscId" th:value="${Bbsc.bbscId}" style="display:none;">
-          <div class="post" th:if="${Bbsc.bcPublic} == 'Y'" >
+          <div class="post" th:if="${Bbsc.bcPublic} == 'Y'"
+               th:onclick="|location.href='@{/bbsc/{id}/detail(id=${Bbsc.bbscId})}'|">
             <div class="info">
               <div class="pro">
                 <div class="img">
@@ -180,8 +181,8 @@
   <script src="/js/board_likeBtn.js"></script>
   <!-- 펫 태그 체크박스 이벤트  -->
   <script src="/js/board_checkPet.js"></script>
-  <!-- 글 클릭 시 상세화면 이동 -->
-  <script src="/js/board_list.js"></script>
+  <!-- 글 클릭 좋아요 이벤트관련 -->
+<!--  <script src="/js/board_list.js"></script>-->
 </body>
 
 </html>

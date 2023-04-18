@@ -1,5 +1,6 @@
 package com.project.zoopiter.domain.bbsc.svc;
 
+import com.project.zoopiter.domain.bbsc.dao.BbscFilterCondition;
 import com.project.zoopiter.domain.entity.Bbsc;
 import com.project.zoopiter.domain.entity.UploadFile;
 import com.project.zoopiter.web.common.AttachFileType;
@@ -26,10 +27,10 @@ public interface BbscSVC {
 
   /**
    * 검색
-   * @param petType 펫태그(강아지,고양이,소동물,기타)
+   * @param filterCondition 펫태그(강아지,고양이,소동물,기타)
    * @return
    */
-  List<Bbsc> findByPetType(String petType);
+  List<Bbsc> findByPetType(BbscFilterCondition filterCondition);
 
 
   /**
@@ -85,5 +86,13 @@ public interface BbscSVC {
    * @return
    */
   int increaseHit(Long bbscId);
+
+  /**
+   * 전체건수
+   * @return 게시글 전체건수
+   */
+  int totalCount();
+  int totalCount(String petType);
+  int totalCount(BbscFilterCondition filterCondition);
 
 }
