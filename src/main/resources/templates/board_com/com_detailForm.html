@@ -33,7 +33,7 @@
         <!-- 첫줄 동물태그 -->
         <div class="tag-l"></div>
         <div class="tag">
-          <div class="tag__pet" th:field="*{petType}" th:text="*{petType}">#강아지</div>
+          <div class="tag__pet" th:if="${not #strings.isEmpty(petType)}" th:field="*{petType}" th:text="*{petType}">#강아지</div>
         </div>
         <div class="tag-r"></div>
 
@@ -111,20 +111,6 @@
                   <button type="button" id="delBtn" class="openBtn">삭제</button>
                 </div>
               </th:block>
-            <!--     게시글 삭제 모달      -->
-              <div class="modal hidden">
-                <div class="bg"></div>
-                <div class="modalBox">
-                  <div class="alarm">
-                    <div class="chk">게시글을 삭제하시겠습니까?</div>
-                    <div class="btn">
-                      <button onclick="location.href='board_com.html'">확인</button>
-                      <button class="closeBtn">취소</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--     게시글 삭제 모달 종료     -->
             </div>
           </div>
         </div>
