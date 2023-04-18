@@ -138,6 +138,16 @@ public class BbscSVCImpl implements BbscSVC{
     return bbscDAO.findAll();
   }
 
+  @Override
+  public List<Bbsc> findAll(int startRec, int endRec) {
+    return bbscDAO.findAll(startRec,endRec);
+  }
+
+  @Override
+  public List<Bbsc> findAll(BbscFilterCondition filterCondition, int startRec, int endRec) {
+    return bbscDAO.findAll(filterCondition,startRec,endRec);
+  }
+
   /**
    * 조회수 증가
    *

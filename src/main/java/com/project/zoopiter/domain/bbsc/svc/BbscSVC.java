@@ -86,7 +86,8 @@ public interface BbscSVC {
    * @return
    */
   List<Bbsc> findAll();
-
+  List<Bbsc> findAll(int startRec, int endRec);
+  List<Bbsc> findAll(BbscFilterCondition filterCondition, int startRec, int endRec);
   /**
    * 조회수 증가
    * @param bbscId
