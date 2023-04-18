@@ -281,10 +281,9 @@ p {
   width: 100%;
   margin-bottom: 15px;
   display: flex;
-  justify-content: center;
 }
 .main-comment .input {
-  width: 90%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   padding: 10px;

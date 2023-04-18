@@ -27,7 +27,7 @@
 
     <div class="mn-l"></div>
     <main class="container">
-      <form action="" method="post" th:object="${bbscDetailForm}">
+      <form id="post" action="" method="post" th:object="${bbscDetailForm}">
         <input id="bbscId" th:field="*{bbscId}" style="display: none;">
         <!-- 메인 컨텐츠 -->
         <!-- 첫줄 동물태그 -->
@@ -133,7 +133,6 @@
       <div class="main-comment">
         <div class="input">
           <div class="main-comment__write">
-
             <div th:text="${session.loginMember.userNick}">닉네임</div>
             <div><input type="text" placeholder="댓글을 입력해주세요." /></div>
             <div class="re_btn">
@@ -149,7 +148,6 @@
       <div class="list-comment-l"></div>
       <div class="list-comment">
         <div class="input item1">
-          <img src="../img/img_profile1.png" style="max-width: 100%; height: 30px" alt="" />
           <div class="comment__list">
             <div>닉네임</div>
             <div>
@@ -164,7 +162,6 @@
           </div>
         </div>
         <div class="input item2">
-          <img src="../img/img_profile1.png" style="max-width: 100%; height: 30px" alt="" />
           <div class="comment">
             <div>닉네임</div>
             <div>

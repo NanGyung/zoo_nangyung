@@ -84,8 +84,9 @@
       <div class="main-nick-l"></div>
       <div class="main-nick">
         <!-- 게시글 -->
-        <th:block th:each="Bbsc : ${bbscList}" >
-          <div class="post" th:if="${Bbsc.bcPublic} == 'Y'" th:onclick="|location.href='@{/bbsc/{id}/detail(id=${Bbsc.bbscId})}'|">
+        <th:block th:each="Bbsc : ${bbscList}"  >
+          <input type="text" id="bbscId" th:value="${Bbsc.bbscId}" style="display:none;">
+          <div class="post" th:if="${Bbsc.bcPublic} == 'Y'" >
             <div class="info">
               <div class="pro">
                 <div class="img">
@@ -103,7 +104,7 @@
                     조회수
                     <p th:text = "${Bbsc.bcHit}">0</p>
                   </div>
-                  <div class="like-icons">
+                  <div class="like-icons" id="likeBtn">
                     <!--  좋아요 누르기 전 아이콘 -->
                     <i class="fa-regular fa-heart"></i>
                     <!-- 좋아요 누른 후 아이콘 -->
@@ -179,6 +180,8 @@
   <script src="/js/board_likeBtn.js"></script>
   <!-- 펫 태그 체크박스 이벤트  -->
   <script src="/js/board_checkPet.js"></script>
+  <!-- 글 클릭 시 상세화면 이동 -->
+  <script src="/js/board_list.js"></script>
 </body>
 
 </html>
