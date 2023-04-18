@@ -51,7 +51,8 @@ public class AttachFileController {
         .body(resource);
   }
 
-  //이미지 뷰
+
+  //이미지 뷰(uploadfileId)
   @GetMapping("/view/{fid}")
   public ResponseEntity<Resource> viewAttach(
       @PathVariable("fid") Long uploadfileId

@@ -22,9 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -187,10 +185,10 @@ public class BbscController {
 
   //목록
   @GetMapping("/list")
-  public String findAll(Model model){
+  public String findAll(
+      Model model){
     List<Bbsc> bbscList = bbscSVC.findAll();
 
-    List<BbscDetailForm> bbscDetailForms = new ArrayList<>();
       bbscList.stream().forEach(bbsc -> {
         BbscDetailForm bbscDetailForm = new BbscDetailForm();
         bbscDetailForm.setBcContent(bbsc.getBcContent());
@@ -201,6 +199,22 @@ public class BbscController {
     if(bbscList.size() == 0){
       throw new BizException("등록된 글이 없습니다!");
     }
+
+    List<Long> bbscIdList = new ArrayList<>();
+    for (Bbsc bbsc : bbscList) {
+      bbscIdList.add(bbsc.getBbscId());
+    }
+
+    Map<Long, Long> map = new LinkedHashMap<>();
+    for (Long bbscId : bbscIdList) {
+      List<UploadFile> imagedFiles = uploadFileSVC.findFilesByCodeWithRid(AttachFileType.F0102, bbscId);
+      if (imagedFiles.size() > 0) {
+        log.info("ImagedFiles={}", imagedFiles);
+        map.put(bbscId,imagedFiles.get(0).getUploadfileId());
+      }
+    }
+    model.addAttribute("imagedFileMap", map);
+    log.info("imagedFileMap={}", map);
     return "board_com/com_main";
   }
 
