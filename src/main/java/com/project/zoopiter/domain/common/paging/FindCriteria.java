@@ -3,12 +3,11 @@ package com.project.zoopiter.domain.common.paging;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
 @ToString
-@Component
+//@Component
 public class FindCriteria extends PageCriteria {
   private String searchType;
   private String[] category;      //펫태그

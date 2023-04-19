@@ -10,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Slf4j
 @SpringBootTest
 class BbscDAOImplTest {
@@ -32,7 +30,7 @@ class BbscDAOImplTest {
   @DisplayName("펫태그 검색")
   void findbyPetTypes() {
     String[] arr= {"기타","소동물"};
-    BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 5, "");
+    BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 11, "");
     List<Bbsc> byPetType = bbscDAO.findByPetType(filterCondition);
     log.info("byPetType={}",byPetType);
   }
@@ -41,7 +39,7 @@ class BbscDAOImplTest {
   @DisplayName("펫태그 게시글 건수")
   void totalCountByPetType() {
     String[] arr= {"기타","소동물"};
-    BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 5, "");
+    BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 11, "");
     int cntOfFindedPetType = bbscDAO.totalCount(filterCondition);
     log.info("cntOfFindedPetType={}",cntOfFindedPetType);
   }
@@ -52,8 +50,8 @@ class BbscDAOImplTest {
     String[] arr= {};
     String filter1 = "bcHit";
     String filter2 = "bcUdate";
-    BbscFilterCondition bcHit = new BbscFilterCondition(arr, 1, 5, filter1);
-    BbscFilterCondition bcUdate = new BbscFilterCondition(arr, 1, 5, filter2);
+    BbscFilterCondition bcHit = new BbscFilterCondition(arr, 1, 11, filter1);
+    BbscFilterCondition bcUdate = new BbscFilterCondition(arr, 1, 11, filter2);
 
     List<Bbsc> findByBchit = bbscDAO.findByFilter(bcHit);
     List<Bbsc> findByBcudate = bbscDAO.findByFilter(bcUdate);

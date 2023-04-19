@@ -127,8 +127,8 @@ p {
 }
 
 .content__view-imgs {
-
    display: flex;
+   flex-wrap: wrap;
 }
 
 /* 조회,좋아요 */
