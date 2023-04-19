@@ -33,7 +33,7 @@ $files?.addEventListener('click', e => {
         .delete(url)
         .then(res => res.json())
         .then(res => {
-            if(res.rtcd == '00'){
+            if(res.header.rtcd == '00'){
                 //첨부파일 정보 화면에서 제거
                 removeAttachFileFromView(e);
             }else{
