@@ -55,7 +55,7 @@
         <div class="title__name">
           <div class="main">커뮤니티 글작성</div>
           <div class="title__inline">
-            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open1" value="Y" class="radio" />
+            <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open1" value="Y" class="radio" checked = "checked"/>
             <label for="cs_open1" class="ml_10">공개</label>
             <input type="radio" th:field="*{bcPublic}" name="cs_open" id="cs_open2" value="N" class="radio" />
             <label for="cs_open2" class="ml_10">비공개</label>
@@ -138,6 +138,10 @@
     frm.submit();
   }
   addBtn.addEventListener('click',add_h,false);
+
+  // 글 공개 라디오 버튼 체크 속성
+  const $radio = document.getElementById('cs_open1');
+  $radio.checked = true;
   </script>
 
 </body>
