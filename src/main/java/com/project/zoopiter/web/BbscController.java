@@ -243,7 +243,7 @@ public class BbscController {
     log.info("/list 요청됨{},{},{},{}",reqPage,searchType,category);
 
     String[] cate = getCategory(category);  // 펫태그 배열
-    log.info("cate={}",cate);
+//    log.info("cate={}",cate);
 
     //FindCriteria 값 설정
     fc.getRc().setReqPage(reqPage.orElse(1)); //요청페이지, 요청없으면 1
@@ -252,25 +252,31 @@ public class BbscController {
     List<Bbsc> bbscList = null;
 
     // 게시물 목록 전체
-    if(category == null){
+    if(!category.isPresent()){
       String[] arr = {};
+
       if(searchType.isPresent()){ //검색어 있음(필터-최신,조회)
         BbscFilterCondition filterCondition = new BbscFilterCondition(
             arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
             searchType.get()
         );
+
         fc.setTotalRec(bbscSVC.totalCount(filterCondition));
         fc.setSearchType(searchType.get());
         bbscList = bbscSVC.findByFilter(filterCondition);
+
       } else if (category.isPresent()) { //검색어 있음(펫태그)
         arr = category.get();
+
         BbscFilterCondition filterCondition2 = new BbscFilterCondition(
             arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
             searchType.get()
         );
+
         fc.setTotalRec(bbscSVC.totalCount(filterCondition2));
         fc.setCategory(category.get());
         bbscList = bbscSVC.findByPetType(filterCondition2);
+
       }else{  //검색어 없음
         // 총레코드수
         fc.setTotalRec(bbscSVC.totalCount());
