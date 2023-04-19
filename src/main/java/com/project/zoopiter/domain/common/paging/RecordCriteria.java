@@ -4,8 +4,6 @@ import lombok.ToString;
 
 
 @ToString
-//@Configuration
-//@Component
 public class RecordCriteria {
   private int reqPage = 1;							//요청페이지
   private final int REC_COUNT_PER_PAGE; //한페이지에 보여줄 레코드수

@@ -4,7 +4,6 @@ import lombok.ToString;
 
 
 @ToString
-//@Component
 public class PageCriteria {
   private RecordCriteria rc;							//요청페이지, 요청페이지에 보여줄 레코드수
   private final int PAGE_COUNT_PER_PAGE;  //요청페이지에 보여줄 페이지수

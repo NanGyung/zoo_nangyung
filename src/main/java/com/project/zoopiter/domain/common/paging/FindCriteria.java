@@ -7,7 +7,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-//@Component
 public class FindCriteria extends PageCriteria {
   private String searchType;
   private String[] category;      //펫태그

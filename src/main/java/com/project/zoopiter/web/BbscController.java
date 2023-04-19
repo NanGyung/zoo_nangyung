@@ -1,13 +1,15 @@
 package com.project.zoopiter.web;
 
+import com.project.zoopiter.domain.bbsc.dao.BbscFilterCondition;
 import com.project.zoopiter.domain.bbsc.svc.BbscSVC;
 import com.project.zoopiter.domain.common.file.svc.UploadFileSVC;
+import com.project.zoopiter.domain.common.paging.FindCriteria;
 import com.project.zoopiter.domain.entity.Bbsc;
 import com.project.zoopiter.domain.entity.UploadFile;
 import com.project.zoopiter.web.common.AttachFileType;
 import com.project.zoopiter.web.common.LoginMember;
-import com.project.zoopiter.web.exception.BizException;
 import com.project.zoopiter.web.form.bbsc.BbscDetailForm;
+import com.project.zoopiter.web.form.bbsc.BbscListForm;
 import com.project.zoopiter.web.form.bbsc.BbscSaveForm;
 import com.project.zoopiter.web.form.bbsc.BbscUpdateForm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,13 +18,18 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -32,9 +39,9 @@ public class BbscController {
   private final BbscSVC bbscSVC;
   private final UploadFileSVC uploadFileSVC;
 
-//  @Autowired
-//  @Qualifier("fc10") //동일한 타입의 객체가 여러개있을때 빈이름을 명시적으로 지정해서 주입받을때
-//  private FindCriteria fc;
+  @Autowired
+  @Qualifier("fc10") //동일한 타입의 객체가 여러개있을때 빈이름을 명시적으로 지정해서 주입받을때
+  private FindCriteria fc;
 
   // 글작성 양식
   @GetMapping("/add")
@@ -184,107 +191,109 @@ public class BbscController {
 
 
   //목록
-  @GetMapping("/list")
-  public String findAll(
-      Model model){
-    List<Bbsc> bbscList = bbscSVC.findAll();
-
-      bbscList.stream().forEach(bbsc -> {
-        BbscDetailForm bbscDetailForm = new BbscDetailForm();
-        bbscDetailForm.setBcContent(bbsc.getBcContent());
-        bbscDetailForm.setBcHit(bbsc.getBcHit());
-        bbscDetailForm.setBcPublic(bbsc.getBcPublic());
-        bbscDetailForm.setBcUdate(bbsc.getBcUdate());
-      });
-
-    model.addAttribute("bbscList", bbscList);
-    if(bbscList.size() == 0){
-      throw new BizException("등록된 글이 없습니다!");
-    }
-
-    // 게시글 id 값들 list에 저장
-    List<Long> bbscIdList = new ArrayList<>();
-    for (Bbsc bbsc : bbscList) {
-      bbscIdList.add(bbsc.getBbscId());
-    }
-
-    // key: 게시글 id value: 첨부파일 id로 맵에 저장
-    Map<Long, Long> map = new LinkedHashMap<>();
-    for (Long bbscId : bbscIdList) {
-      List<UploadFile> imagedFiles = uploadFileSVC.findFilesByCodeWithRid(AttachFileType.F0102, bbscId);
-      if (imagedFiles.size() > 0) {
-        log.info("ImagedFiles={}", imagedFiles);
-        map.put(bbscId,imagedFiles.get(0).getUploadfileId());
-      }
-    }
-    model.addAttribute("imagedFileMap", map);
-    log.info("imagedFileMap={}", map);
-    return "board_com/com_main";
-  }
-
-  // 페이징 구현
-  // searchType: 조회순, 최신순 category: 동물태그
-//  @GetMapping({"/list",
-//                "/list/{reqPage}",
-//                "/list/{reqPage}//",
-//                "/list/{reqPage}/{searchType}/{keyword}"})
-//  public String listAndReqPage(
-//      @PathVariable(required = false) Optional<Integer> reqPage,
-//      @PathVariable(required = false) Optional<String> searchType,
-//      @RequestParam(required = false) Optional<String[]> category,
+//  @GetMapping("/list")
+//  public String findAll(
 //      Model model){
-//    log.info("/list 요청됨{},{},{},{}",reqPage,searchType,category);
+//    List<Bbsc> bbscList = bbscSVC.findAll();
 //
-//    String[] cate = getCategory(category);  // 펫태그 배열
+//      bbscList.stream().forEach(bbsc -> {
+//        BbscDetailForm bbscDetailForm = new BbscDetailForm();
+//        bbscDetailForm.setBcContent(bbsc.getBcContent());
+//        bbscDetailForm.setBcHit(bbsc.getBcHit());
+//        bbscDetailForm.setBcPublic(bbsc.getBcPublic());
+//        bbscDetailForm.setBcUdate(bbsc.getBcUdate());
+//      });
 //
-//    //FindCriteria 값 설정
-//    fc.getRc().setReqPage(reqPage.orElse(1)); //요청페이지, 요청없으면 1
-//    fc.setSearchType(searchType.orElse(""));  //검색유형(조회수,최신순)
-//
-//    List<Bbsc> bbscList = null;
-//
-//    // 게시물 목록 전체
-//    if(category == null || StringUtils.isEmpty(String.valueOf(cate))){
-//      String[] arr = {};
-//      if(searchType.isPresent()){ //검색어 있음(필터-최신,조회)
-//        BbscFilterCondition filterCondition = new BbscFilterCondition(
-//            arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
-//            searchType.get()
-//        );
-//        fc.setTotalRec(bbscSVC.totalCount(filterCondition));
-//        fc.setSearchType(searchType.get());
-//        bbscList = bbscSVC.findByFilter(filterCondition);
-//      } else if (category.isPresent()) { //검색어 있음(펫태그)
-//        arr = category.get();
-//        BbscFilterCondition filterCondition2 = new BbscFilterCondition(
-//            arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
-//            searchType.get()
-//        );
-//        fc.setTotalRec(bbscSVC.totalCount(filterCondition2));
-//        fc.setCategory(category.get());
-//        bbscList = bbscSVC.findByPetType(filterCondition2);
-//      }else{  //검색어 없음
-//        // 총레코드수
-//        fc.setTotalRec(bbscSVC.totalCount());
-//        bbscList = bbscSVC.findAll(fc.getRc().getStartRec(),fc.getRc().getEndRec());
-//      }
+//    model.addAttribute("bbscList", bbscList);
+//    if(bbscList.size() == 0){
+//      throw new BizException("등록된 글이 없습니다!");
 //    }
 //
-//      List<BbscListForm> partOfList = new ArrayList<>();
-//      for(Bbsc bbsc : bbscList){
-//        BbscListForm listForm = new BbscListForm();
-//        BeanUtils.copyProperties(bbsc, listForm);
-//        partOfList.add(listForm);
+//    // 게시글 id 값들 list에 저장
+//    List<Long> bbscIdList = new ArrayList<>();
+//    for (Bbsc bbsc : bbscList) {
+//      bbscIdList.add(bbsc.getBbscId());
+//    }
+//
+//    // key: 게시글 id value: 첨부파일 id로 맵에 저장
+//    Map<Long, Long> map = new LinkedHashMap<>();
+//    for (Long bbscId : bbscIdList) {
+//      List<UploadFile> imagedFiles = uploadFileSVC.findFilesByCodeWithRid(AttachFileType.F0102, bbscId);
+//      if (imagedFiles.size() > 0) {
+//        log.info("ImagedFiles={}", imagedFiles);
+//        map.put(bbscId,imagedFiles.get(0).getUploadfileId());
 //      }
-//
-//      model.addAttribute("list",partOfList);
-//      model.addAttribute("fc",fc);
-//      model.addAttribute("petTag",cate);
-//
+//    }
+//    model.addAttribute("imagedFileMap", map);
+//    log.info("imagedFileMap={}", map);
 //    return "board_com/com_main";
 //  }
 
-  //쿼리스트링 카테고리 읽기, 없으면 ""반환
+  // 페이징 구현(목록)
+  // searchType: 조회순, 최신순 category: 동물태그
+  @GetMapping({"/list",
+                "/list/{reqPage}",
+                "/list/{reqPage}/",
+                "/list/{reqPage}/{searchType}/"})
+  public String listAndReqPage(
+      @PathVariable(required = false) Optional<Integer> reqPage,
+      @PathVariable(required = false) Optional<String> searchType,
+      @RequestParam(required = false) Optional<String[]> category,
+      Model model){
+    log.info("/list 요청됨{},{},{},{}",reqPage,searchType,category);
+
+    String[] cate = getCategory(category);  // 펫태그 배열
+    log.info("cate={}",cate);
+
+    //FindCriteria 값 설정
+    fc.getRc().setReqPage(reqPage.orElse(1)); //요청페이지, 요청없으면 1
+    fc.setSearchType(searchType.orElse(""));  //검색유형(조회수,최신순)
+
+    List<Bbsc> bbscList = null;
+
+    // 게시물 목록 전체
+    if(category == null){
+      String[] arr = {};
+      if(searchType.isPresent()){ //검색어 있음(필터-최신,조회)
+        BbscFilterCondition filterCondition = new BbscFilterCondition(
+            arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+            searchType.get()
+        );
+        fc.setTotalRec(bbscSVC.totalCount(filterCondition));
+        fc.setSearchType(searchType.get());
+        bbscList = bbscSVC.findByFilter(filterCondition);
+      } else if (category.isPresent()) { //검색어 있음(펫태그)
+        arr = category.get();
+        BbscFilterCondition filterCondition2 = new BbscFilterCondition(
+            arr, fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+            searchType.get()
+        );
+        fc.setTotalRec(bbscSVC.totalCount(filterCondition2));
+        fc.setCategory(category.get());
+        bbscList = bbscSVC.findByPetType(filterCondition2);
+      }else{  //검색어 없음
+        // 총레코드수
+        fc.setTotalRec(bbscSVC.totalCount());
+        log.info("startRec={},endRec={}",fc.getRc().getStartRec(),fc.getRc().getEndRec());
+        bbscList = bbscSVC.findAll(fc.getRc().getStartRec(),fc.getRc().getEndRec());
+      }
+    }
+
+      List<BbscListForm> partOfList = new ArrayList<>();
+      for(Bbsc bbsc : bbscList){
+        BbscListForm listForm = new BbscListForm();
+        BeanUtils.copyProperties(bbsc, listForm);
+        partOfList.add(listForm);
+      }
+
+      model.addAttribute("list",partOfList);
+      model.addAttribute("fc",fc);
+      model.addAttribute("petTag",cate);
+
+    return "board_com/com_main";
+  }
+
+  //쿼리스트링 카테고리(펫태그) 읽기, 없으면 ""반환
   private String[] getCategory(Optional<String[]> category) {
     String[] result = {};
     if(category.isPresent()){
