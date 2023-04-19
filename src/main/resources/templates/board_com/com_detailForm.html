@@ -33,7 +33,7 @@
         <!-- 첫줄 동물태그 -->
         <div class="tag-l"></div>
         <div class="tag">
-          <div class="tag__pet" th:if="${not #strings.isEmpty(petType)}" th:field="*{petType}" th:text="*{petType}">#강아지</div>
+          <div class="tag__pet" th:if="${not #strings.isEmpty(bbscDetailForm.petType)}" th:field="*{petType}" th:text="*{petType}">#강아지</div>
         </div>
         <div class="tag-r"></div>
 

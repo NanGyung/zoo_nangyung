@@ -84,8 +84,14 @@
 
       <!-- 첨부파일버튼 -->
       <div class="file-l"></div>
-      <div class="file">
-        <input type='file' th:field="*{imageFiles}"  name='' multiple />
+      <div class="file" id="files">
+        <input type='file' th:field="*{imageFiles}" multiple />
+        <div th:each="file : ${imagedFiles}" class="view__img">
+          <th:block th:if="${#strings.contains(file.ftype,'image')}">
+            <img th:src="@{|/attach/view/${file.uploadfileId}|}" th:width="30px" th:height="30px">
+          </th:block>
+          <i class="fa-solid fa-trash-can" th:data-rid="${file.uploadfileId}"></i>
+        </div>
       </div>
       <div class="file-r"></div>
       <!-- 목록,등록,취소 버튼 -->
@@ -94,7 +100,7 @@
         <div class="btn__che">
           <div class="btn__btn">
             <div class="detail">
-              <button type="button" th:onclick="|location.href='@{/bbsc/list}'|">
+              <button type="button" id="listBtn">
                 목록
               </button>
             </div>
@@ -130,7 +136,7 @@
 <!-- footer 개인정보처리방침 모달 구현 -->
 <script src="/js/ft_modal.js"></script>
 <!-- 등록 구현 -->
-<script src="/js/board_editForm.js"></script>
+<script src="/js/board_editForm.js" type="module" charset='utf-8'></script>
 
 
 </body>

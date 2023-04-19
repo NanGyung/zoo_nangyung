@@ -298,7 +298,7 @@ p {
 /* 첨부파일버튼 */
 .file {
   grid-area: file;
-  /* width: 100%; */
+  display: flex;
   font-size: 17px;
   font-weight: bold;
   padding: 20px;
