@@ -15,3 +15,8 @@ $delBtn?.addEventListener('click', e => {
   }
 });
 
+//댓글 등록버튼
+const $addBtn = document.getElementById('addBtn');
+//댓글 취소버튼
+const $cancelBtn = document.getElementById('cancelBtn');
+

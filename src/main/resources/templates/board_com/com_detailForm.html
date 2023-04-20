@@ -136,8 +136,8 @@
             <div th:text="${session.loginMember.userNick}">닉네임</div>
             <div><input type="text" placeholder="댓글을 입력해주세요." /></div>
             <div class="re_btn">
-              <div class="btn1"><button>취소</button></div>
-              <div class="btn2"><button>등록</button></div>
+              <div class="btn1"><button id="cancelBtn">취소</button></div>
+              <div class="btn2"><button id="addBtn">등록</button></div>
             </div>
           </div>
         </div>
@@ -149,13 +149,25 @@
       <div class="list-comment">
         <div class="input item1" th:each="reply : ${findedReplies}">
           <div class="comment__list">
-            <div th:text="${reply.userNick}">닉네임</div>
-            <div th:text="${reply.ccContent}">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit
-              iusto eveniet in inventore, magnam corrupti quae consequatur eos
-              assumenda necessitatibus impedit minima nihil qui, amet adipisci
-              voluptates tempore earum eius!
-            </div>
+            <article class="left">
+              <div th:text="${reply.userNick}" style="margin-bottom: 20px; font-weight: bold;">닉네임</div>
+              <div th:text="${reply.ccContent}">
+                sample text
+              </div>
+            </article>
+            <aside class="right">
+              <div th:text="${reply.ccUdate}">time</div>
+              <th:block th:if="${reply.userNick} == ${session.loginMember.userNick}">
+                <div class="comment__btn">
+                  <div class="btn1"><button id="replyUpdateBtn1">수정</button></div>
+                  <div class="btn2"><button id="replyDelBtn">삭제</button></div>
+                </div>
+                <div class="update" style="display: none;">
+                  <div class="btn1"><button id="replyUpdateBtn2">확인</button></div>
+                  <div class="btn2"><button id="replyCancleBtn">취소</button></div>
+                </div>
+              </th:block>
+            </aside>
           </div>
         </div>
       </div>
@@ -182,7 +194,7 @@
   <script src="/js/ft_modal.js"></script>
   <!-- 좋아요 구현 -->
   <script src="/js/board_likeBtn.js"></script>
-  <!-- 수정, 삭제 버튼 이벤트 -->
+  <!-- 버튼 이벤트 -->
   <script src="/js/board_detailForm.js" charset='euc-kr'></script>
 
 </body>
