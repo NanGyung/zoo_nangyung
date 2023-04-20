@@ -100,4 +100,17 @@ public class BbscReplyDAOImpl implements BbscReplyDAO {
     return template.update(sql, Map.of("ccId",ccId));
   }
 
+  /**
+   * 댓글 갯수
+   *
+   * @param bbscId 게시글 번호
+   * @return 댓글 갯수
+   */
+  @Override
+  public int countOfReplies(Long bbscId) {
+    String sql = "select count(*) from c_bbsc where bbsc_id = :bbscId";
+    Map<String, Long> param = Map.of("bbscId", bbscId);
+    Integer cntOfReplies = template.queryForObject(sql, param, Integer.class);
+    return cntOfReplies;
+  }
 }

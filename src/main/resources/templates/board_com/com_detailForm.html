@@ -125,7 +125,7 @@
       <div class="comment-cnt">
         <div class="comment-cnt__num">
           <div>댓글</div>
-          <div>2</div>
+          <div th:text="${cntOfReplies}">2</div>
         </div>
       </div>
       <div class="comment-cnt-r"></div>
@@ -147,31 +147,14 @@
       <!-- 댓글 리스트 -->
       <div class="list-comment-l"></div>
       <div class="list-comment">
-        <div class="input item1">
+        <div class="input item1" th:each="reply : ${findedReplies}">
           <div class="comment__list">
-            <div>닉네임</div>
-            <div>
+            <div th:text="${reply.userNick}">닉네임</div>
+            <div th:text="${reply.ccContent}">
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit
               iusto eveniet in inventore, magnam corrupti quae consequatur eos
               assumenda necessitatibus impedit minima nihil qui, amet adipisci
               voluptates tempore earum eius!
-            </div>
-            <div class="re2">
-              <div id="re2" style="color: black; font-size: 12px"></div>
-            </div>
-          </div>
-        </div>
-        <div class="input item2">
-          <div class="comment">
-            <div>닉네임</div>
-            <div>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit
-              iusto eveniet in inventore, magnam corrupti quae consequatur eos
-              assumenda necessitatibus impedit minima nihil qui, amet adipisci
-              voluptates tempore earum eius!
-            </div>
-            <div class="re3">
-              <div id="re3" style="color: black; font-size: 12px"></div>
             </div>
           </div>
         </div>

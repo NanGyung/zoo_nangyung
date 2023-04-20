@@ -22,6 +22,7 @@ public interface BbscReplyDAO {
   Optional<List<BbscReply>> findByBbscId(Long bbscId);
 
 
+
   /**
    * 댓글 수정
    * @param bbscId 글번호
@@ -38,5 +39,11 @@ public interface BbscReplyDAO {
    */
   int deleteByCcid(Long ccId);
 
+  /**
+   * 댓글 갯수
+   * @param bbscId 게시글 번호
+   * @return 댓글 갯수
+   */
+  int countOfReplies(Long bbscId);
 
 }

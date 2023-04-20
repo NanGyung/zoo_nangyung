@@ -37,4 +37,11 @@ public interface BbscReplySVC {
    * @return 삭제건수
    */
   int deleteByCcid(Long ccId);
+
+  /**
+   * 댓글 갯수
+   * @param bbscId 게시글 번호
+   * @return 댓글 갯수
+   */
+  int countOfReplies(Long bbscId);
 }

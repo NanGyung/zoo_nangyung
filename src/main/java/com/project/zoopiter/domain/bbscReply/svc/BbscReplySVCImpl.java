@@ -58,4 +58,15 @@ public class BbscReplySVCImpl implements BbscReplySVC{
   public int deleteByCcid(Long ccId) {
     return bbscReplyDAO.deleteByCcid(ccId);
   }
+
+  /**
+   * 댓글 갯수
+   *
+   * @param bbscId 게시글 번호
+   * @return 댓글 갯수
+   */
+  @Override
+  public int countOfReplies(Long bbscId) {
+    return bbscReplyDAO.countOfReplies(bbscId);
+  }
 }

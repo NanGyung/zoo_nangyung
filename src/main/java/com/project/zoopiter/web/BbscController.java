@@ -2,9 +2,11 @@ package com.project.zoopiter.web;
 
 import com.project.zoopiter.domain.bbsc.dao.BbscFilterCondition;
 import com.project.zoopiter.domain.bbsc.svc.BbscSVC;
+import com.project.zoopiter.domain.bbscReply.svc.BbscReplySVC;
 import com.project.zoopiter.domain.common.file.svc.UploadFileSVC;
 import com.project.zoopiter.domain.common.paging.FindCriteria;
 import com.project.zoopiter.domain.entity.Bbsc;
+import com.project.zoopiter.domain.entity.BbscReply;
 import com.project.zoopiter.domain.entity.UploadFile;
 import com.project.zoopiter.web.common.AttachFileType;
 import com.project.zoopiter.web.common.LoginMember;
@@ -35,6 +37,7 @@ import java.util.*;
 public class BbscController {
   private final BbscSVC bbscSVC;
   private final UploadFileSVC uploadFileSVC;
+  private final BbscReplySVC bbscReplySVC;
 
   @Autowired
   @Qualifier("fc10") //동일한 타입의 객체가 여러개있을때 빈이름을 명시적으로 지정해서 주입받을때
@@ -115,7 +118,14 @@ public class BbscController {
       log.info("ImagedFiles={}",imagedFiles);
       model.addAttribute("imagedFiles",imagedFiles);
     }
-//    bbscDetailForm.setImagedFiles(imagedFiles);
+
+    // 댓글 총갯수
+    int cntOfReplies = bbscReplySVC.countOfReplies(bbscId);
+    model.addAttribute("cntOfReplies",cntOfReplies);
+    // 댓글 조회
+    Optional<List<BbscReply>> bbscReplies = bbscReplySVC.findByBbscId(bbscId);
+    List<BbscReply> findedReplies = bbscReplies.get();
+    model.addAttribute("findedReplies",findedReplies);
 
     model.addAttribute("bbscDetailForm",bbscDetailForm);
     return "board_com/com_detailForm";
