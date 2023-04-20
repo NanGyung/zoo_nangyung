@@ -26,10 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -285,12 +282,34 @@ public class BbscController {
       }
     }
 
+    // ListForm에 게시글 저장
       List<BbscListForm> partOfList = new ArrayList<>();
       for(Bbsc bbsc : bbscList){
         BbscListForm listForm = new BbscListForm();
         BeanUtils.copyProperties(bbsc, listForm);
+
         partOfList.add(listForm);
       }
+      log.info("partOfList={}",partOfList);
+
+
+    // 게시글 id 값들 list에 저장
+      List<Long> bbscIdList = new ArrayList<>();
+      for (Bbsc bbsc : bbscList) {
+        bbscIdList.add(bbsc.getBbscId());
+      }
+
+      // key: 게시글 id value: 첨부파일 id로 맵에 저장
+      Map<Long, Long> map = new LinkedHashMap<>();
+      for (Long bbscId : bbscIdList) {
+        List<UploadFile> imagedFiles = uploadFileSVC.findFilesByCodeWithRid(AttachFileType.F0102, bbscId);
+        if (imagedFiles.size() > 0) {
+          log.info("ImagedFiles={}", imagedFiles);
+          map.put(bbscId,imagedFiles.get(0).getUploadfileId());
+        }
+      }
+      model.addAttribute("imagedFileMap", map);
+      log.info("imagedFileMap={}", map);
 
       model.addAttribute("list",partOfList);
       model.addAttribute("fc",fc);
@@ -306,7 +325,7 @@ public class BbscController {
       result = category.get();
     }else{
       String[] cate = category.orElse(new String[0]); // 값이 없는 경우 길이가 0인 배열 생성
-      String[] emptyArray = new String[cate.length];
+//      String[] emptyArray = new String[cate.length];
       result = Arrays.stream(cate).map(x -> "").toArray(String[]::new); // 배열의 모든 요소를 빈 문자열("")로 초기화
     }
     log.info("category={}", result);

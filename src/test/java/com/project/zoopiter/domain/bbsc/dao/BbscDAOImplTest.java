@@ -59,4 +59,20 @@ class BbscDAOImplTest {
     log.info("findByBchit={}",findByBchit);
     log.info("findByBcudate={}",findByBcudate);
   }
+
+  @Test
+  @DisplayName("전체 검색(레코드번호)")
+  void findAll(){
+    List<Bbsc> findedAll = bbscDAO.findAll(1, 5);
+    log.info("findedAll={}",findedAll);
+  }
+
+  @Test
+  @DisplayName("전체 검색(펫필터,레코드번호)")
+  void findAll2(){
+    String[] arr= {"기타","소동물"};
+    BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 12, "");
+    List<Bbsc> findedAll = bbscDAO.findAll(filterCondition,1, 5);
+    log.info("findedAll={}",findedAll);
+  }
 }
