@@ -37,9 +37,15 @@ const add_h = e => {
    };
     ajax
        .post(url, payLoad)
-       .then(res => res.json())
+       .then(res => {
+                if(res.header.rtcd == '00'){
+                    confirm('댓글 등록완료!');
+                    res.json();
+                }
+        })
        .catch(console.error); //err=>console.error(err)
        return;
+
 }
 
 $addBtn.addEventListener('click',add_h,false);
@@ -47,5 +53,6 @@ $addBtn.addEventListener('click',add_h,false);
 //댓글 등록취소
 $cancelBtn.addEventListener('click',e => {
    $ccContent.disabled == true;
+    $ccContent.textContent = '';
 },false);
 
