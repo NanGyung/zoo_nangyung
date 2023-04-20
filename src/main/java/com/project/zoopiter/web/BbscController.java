@@ -237,7 +237,7 @@ public class BbscController {
       @PathVariable(required = false) Optional<String> searchType,
       @RequestParam(required = false) Optional<String[]> category,
       Model model){
-    log.info("/list 요청됨{},{},{},{}",reqPage,searchType,category);
+    log.info("/list 요청됨{},{},{}",reqPage,searchType,category);
 
     String[] cate = getCategory(category);  // 펫태그 배열
 //    log.info("cate={}",cate);

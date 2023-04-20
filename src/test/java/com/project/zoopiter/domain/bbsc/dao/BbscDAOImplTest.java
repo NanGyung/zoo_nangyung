@@ -50,8 +50,8 @@ class BbscDAOImplTest {
     String[] arr= {};
     String filter1 = "bcHit";
     String filter2 = "bcUdate";
-    BbscFilterCondition bcHit = new BbscFilterCondition(arr, 1, 11, filter1);
-    BbscFilterCondition bcUdate = new BbscFilterCondition(arr, 1, 11, filter2);
+    BbscFilterCondition bcHit = new BbscFilterCondition(arr, 1, 10, filter1);
+    BbscFilterCondition bcUdate = new BbscFilterCondition(arr, 1, 10, filter2);
 
     List<Bbsc> findByBchit = bbscDAO.findByFilter(bcHit);
     List<Bbsc> findByBcudate = bbscDAO.findByFilter(bcUdate);

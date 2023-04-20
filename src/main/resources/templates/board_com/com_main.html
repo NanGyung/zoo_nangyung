@@ -35,10 +35,10 @@
         <div class="list">
           <div class="main">커뮤니티</div>
           <div class="selectBox">
-            <select class="select" th:field="${fc.searchType}">
-              <option value="bc_hit">조회순</option>
-              <option value="bc_udate">최신순</option>
-              <option value="좋아요">좋아요</option>
+            <select class="select" id="searchType" th:field="${fc.searchType}">
+              <option value="bcHit">조회순</option>
+              <option value="bcUdate">최신순</option>
+              <option value="">좋아요</option>
             </select>
             <span class="icoArrow">
               <i class="fa-solid fa-arrow-down"></i>
@@ -52,14 +52,14 @@
           <!-- 동물 태그 선택 -->
           <div class="left">
             <div class="tag">동물태그</div>
-            <form th:field="${fc.category}" class="selectBox" name="petTag">
-              <input type="checkbox" id="dog" name="dog" value="강아지">
+            <form th:field="${fc.category}" class="selectBox" name="pet">
+              <input type="checkbox" id="dog" class="petTag" name="pet" th:value="강아지">
               <label for="dog" >강아지</label>
-              <input type="checkbox" id="cat" name="cat" value="고양이">
+              <input type="checkbox" id="cat" class="petTag" name="pet" th:value="고양이">
               <label for="cat">고양이</label>
-              <input type="checkbox"  id="small" name="small" value="소동물">
+              <input type="checkbox"  id="small" class="petTag" name="pet" th:value="소동물">
               <label for="small">소동물</label>
-              <input type="checkbox" id="other" name="other" value="기타">
+              <input type="checkbox" id="other" class="petTag" name="pet" th:value="기타">
               <label for="other" >기타</label>
               <button id="checkBtn" type="button">적용</button>
             </form>
@@ -197,8 +197,8 @@
   <script src="/js/board_likeBtn.js"></script>
   <!-- 펫 태그 체크박스 이벤트  -->
   <script src="/js/board_checkPet.js"></script>
-  <!-- 글 클릭 좋아요 이벤트관련 -->
-<!--  <script src="/js/board_list.js"></script>-->
+  <!-- 게시글 목록 -->
+  <script src="/js/board_list.js"></script>
 </body>
 
 </html>
