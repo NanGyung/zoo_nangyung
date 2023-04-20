@@ -42,13 +42,6 @@
 
   <div class="mn-l"></div>
   <main class="container">
-    <!-- 개인정보 약관 -->
-    <th:block th:replace="~{fragment/footer::ft-modal1}"></th:block>
-    <!-- 이용 약관 -->
-    <th:block th:replace="~{fragment/footer::ft-modal2}"></th:block>
-    <!-- 광고 문의 -->
-    <th:block th:replace="~{fragment/footer::ft-modal3}"></th:block>
-
     <section class="container__content item1">
       <article>
         <p id="subTitle">펫 병원</p>
@@ -62,7 +55,7 @@
           품종을 진료하는 병원을 보여드려요.
         </p>
         <div class="item1__button">
-          <a href="findBymap.html">병원 더 찾아보기</a>
+          <a href="findBymap.html" th:href="@{/findBymap}">병원 더 찾아보기</a>
         </div>
       </article>
       <aside>
@@ -85,28 +78,28 @@
           정확한 후기로 펫오너님들과 아이들의 건강과 안전을 지켜드릴게요!
         </p>
         <div class="item2__button">
-          <a href="./board_review.html">펫 병원후기 더보기</a>
+          <a href="./board_review.html"  th:href="@{/BBSH}">펫 병원후기 더보기</a>
         </div>
       </article>
       <aside>
         <div class="item2__slider">
           <div>
-            <a href="./board_review.html">
+            <a href="./board_review.html" th:href="@{/BBSH}">
               <img src="../img/img_review01.jpg" alt="review01" />
             </a>
           </div>
           <div>
-            <a href="./board_review.html">
+            <a href="./board_review.html" th:href="@{/BBSH}">
               <img src="../img/img_review02.jpg" alt="review02" />
             </a>
           </div>
           <div>
-            <a href="./board_review.html">
+            <a href="./board_review.html" th:href="@{/BBSH}">
               <img src="../img/img_review03.jpg" alt="review03" />
             </a>
           </div>
           <div>
-            <a href="./board_review.html">
+            <a href="./board_review.html" th:href="@{/BBSH}">
               <img src="../img/img_review04.jpg" alt="review04" />
             </a>
           </div>
@@ -125,7 +118,7 @@
           우리 아이들과의 이야기를 함께 나눠보세요 !
         </p>
         <div class="item3__button">
-          <a href="#">추억 엿보기</a>
+          <a href="#" th:href="@{/bbsc/list}">추억 엿보기</a>
         </div>
       </article>
       <aside>
@@ -138,6 +131,12 @@
   <div class="ft-l"></div>
   <!-- 프레그먼트 반영 footer -->
   <th:block th:replace="~{fragment/footer::fnb}"></th:block>
+  <!-- 개인정보 약관 -->
+  <th:block th:replace="~{fragment/footer::ft-modal1}"></th:block>
+  <!-- 이용 약관 -->
+  <th:block th:replace="~{fragment/footer::ft-modal2}"></th:block>
+  <!-- 광고 문의 -->
+  <th:block th:replace="~{fragment/footer::ft-modal3}"></th:block>
   <div class="ft-r"></div>
 </div>
 <!-- 햄버거 메뉴 구현 -->

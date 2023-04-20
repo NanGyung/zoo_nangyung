@@ -29,40 +29,8 @@
 <div class="wrap">
   <div class="hd-l"></div>
   <header class="hd">
-    <nav class="hd__menu">
-      <ul class="hd__menu__list1">
-        <li id="logo">
-          <a href="index.html" th:href="@{/}">
-            <i class="fa-solid fa-dog fa-2x"></i>
-            <h3>슬기로운 반려생활</h3>
-          </a>
-        </li>
-        <li class="hd__menu__list1__item list1-item1">
-          <a href="#">펫병원</a>
-          <ul class="hd__menu__list1__item__submenu">
-            <li><a href="#">병원찾기</a></li>
-          </ul>
-        </li>
-        <li class="hd__menu__list1__item list1-item2">
-          <a href="#">게시판</a>
-          <ul class="hd__menu__list1__item__submenu">
-            <li><a href="#">커뮤니티</a></li>
-            <li><a href="./board_review.html">병원후기</a></li>
-          </ul>
-        </li>
-        <li class="hd__menu__list1__item list1-item3" id="myPage">
-          <a href="./mypage_main.html">마이페이지</a>
-        </li>
-        <div class="hd__menu__list1__item list1-item4" id="join">
-          <li><a href="./member_login.html">로그인</a></li>
-          |
-          <li><a href="./member_join.html">회원가입</a></li>
-        </div>
-      </ul>
-      <a href="#" id="hamburger">
-        <i class="fa-solid fa-bars"></i>
-      </a>
-    </nav>
+    <!-- 프레그먼트 반영:menu  -->
+    <th:block th:replace="~{fragment/menu::gnb}"></th:block>
   </header>
   <div class="hd-r"></div>
 
@@ -128,13 +96,13 @@
     <div class="bottom-menu">
       <!-- 동물필터 -->
       <form action="" class="select-tag" name="petTag">
-        <input type="checkbox" name="dog">
+        <input type="checkbox" name="dog" id="dog" value="강아지" >
         <label for="dog">강아지</label>
-        <input type="checkbox" name="cat">
+        <input type="checkbox" name="cat" id="cat" value="고양이">
         <label for="cat">고양이</label>
-        <input type="checkbox" name="small">
+        <input type="checkbox" name="small" id="small" value="소동물">
         <label for="small">소동물</label>
-        <input type="checkbox" name="other">
+        <input type="checkbox" name="other" id="other" value="기타">
         <label for="other">기타</label>
         <button id="petTagBtn">적용</button>
       </form>
