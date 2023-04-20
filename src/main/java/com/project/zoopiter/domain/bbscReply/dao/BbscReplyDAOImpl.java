@@ -4,6 +4,7 @@ import com.project.zoopiter.domain.entity.BbscReply;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @ToString
 @Slf4j
@@ -45,37 +47,43 @@ public class BbscReplyDAOImpl implements BbscReplyDAO {
     return ccId;
   }
 
+
   /**
    * 댓글목록
    *
+   * @param bbscId 글 번호
    * @return
    */
   @Override
-  public List<BbscReply> findAll() {
-    String sql = "select * from c_bbsc";
-
-    List<BbscReply> list = template.query(sql, new BeanPropertyRowMapper<>(BbscReply.class));
-
-    return list;
+  public Optional<List<BbscReply>> findByBbscId(Long bbscId) {
+    String sql = "select * from c_bbsc where bbsc_id = :bbscId";
+    try{
+      Map<String,Long> param = Map.of("bbscId",bbscId);
+      List<BbscReply> bbscReplyList = template.query(sql, param, BeanPropertyRowMapper.newInstance(BbscReply.class));
+      return Optional.of(bbscReplyList);
+    }catch (EmptyResultDataAccessException e){
+      return Optional.empty();
+    }
   }
 
   /**
    * 댓글 수정
    *
-   * @param rnum      댓글번호
+   * @param bbscId  글 번호
    * @param bbscReply
    * @return 수정건수
    */
   @Override
-  public int updateByRnum(Long rnum, BbscReply bbscReply) {
+  public int updateByCcid(Long bbscId, BbscReply bbscReply) {
     StringBuffer sql = new StringBuffer();
-    sql.append("update bbscReply ");
+    sql.append("update c_bbsc ");
     sql.append("set cc_content = :ccContent, cc_udate = systimestamp ");
-    sql.append("where cc_id = :ccId ");
+    sql.append("where cc_id = :ccId and bbsc_id = :bbscId ");
 
     SqlParameterSource param = new MapSqlParameterSource()
         .addValue("ccContent",bbscReply.getCcContent())
-        .addValue("ccId",rnum);
+        .addValue("ccId",bbscReply.getCcId())
+        .addValue("bbscId",bbscId);
 
     return template.update(sql.toString(),param);
   }
@@ -83,13 +91,13 @@ public class BbscReplyDAOImpl implements BbscReplyDAO {
   /**
    * 삭제
    *
-   * @param rnum      댓글번호
+   * @param ccId  댓글번호
    * @return 삭제건수
    */
   @Override
-  public int deleteByRnum(Long rnum) {
+  public int deleteByCcid(Long ccId) {
     String sql = "delete from c_bbsc where cc_id = :ccId";
-    return template.update(sql, Map.of("ccId",rnum));
+    return template.update(sql, Map.of("ccId",ccId));
   }
 
 }

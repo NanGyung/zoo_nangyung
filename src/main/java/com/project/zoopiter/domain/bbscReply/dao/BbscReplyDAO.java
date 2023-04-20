@@ -3,6 +3,7 @@ package com.project.zoopiter.domain.bbscReply.dao;
 import com.project.zoopiter.domain.entity.BbscReply;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BbscReplyDAO {
   /**
@@ -12,28 +13,30 @@ public interface BbscReplyDAO {
    */
   Long save(BbscReply bbscReply);
 
+
   /**
    * 댓글목록
+   * @param bbscId 글 번호
    * @return
    */
-  List<BbscReply> findAll();
+  Optional<List<BbscReply>> findByBbscId(Long bbscId);
 
 
   /**
    * 댓글 수정
-   * @param rnum 댓글번호
+   * @param bbscId 글번호
    * @param bbscReply
    * @return 수정건수
    */
-  int updateByRnum(Long rnum, BbscReply bbscReply);
+  int updateByCcid(Long bbscId, BbscReply bbscReply);
 
 
   /**
    * 삭제
-   * @param rnum 댓글번호
+   * @param ccId 댓글번호
    * @return 삭제건수
    */
-  int deleteByRnum(Long rnum);
+  int deleteByCcid(Long ccId);
 
 
 }
