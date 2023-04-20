@@ -41,8 +41,15 @@ public class BbscReplyController {
     return res;
   }
 
-  // 댓글 목록
-
-
   // 댓글 삭제
+  @ResponseBody
+  @DeleteMapping("/del/{ccId}")
+  public RestResponse<Object> delete(
+      @PathVariable Long ccId
+  ){
+    RestResponse<Object> res = null;
+    int cntOfDel = bbscReplySVC.deleteByCcid(ccId);
+    res = RestResponse.createRestResponse("00","성공",cntOfDel);
+    return res;
+  }
 }

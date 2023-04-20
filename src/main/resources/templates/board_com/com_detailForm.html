@@ -131,16 +131,16 @@
       <div class="comment-cnt-r"></div>
       <div class="main-comment-l"></div>
       <div class="main-comment">
-        <div class="input">
+        <form class="input" method="post">
           <div class="main-comment__write">
-            <div th:text="${session.loginMember.userNick}">닉네임</div>
-            <div><input type="text" placeholder="댓글을 입력해주세요." /></div>
+            <div id="userNick" th:text="${session.loginMember.userNick}">닉네임</div>
+            <div><input id="ccContent" type="text" placeholder="댓글을 입력해주세요." /></div>
             <div class="re_btn">
               <div class="btn1"><button id="cancelBtn">취소</button></div>
               <div class="btn2"><button id="addBtn">등록</button></div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
       <div class="main-comment-r"></div>
 
@@ -195,7 +195,7 @@
   <!-- 좋아요 구현 -->
   <script src="/js/board_likeBtn.js"></script>
   <!-- 버튼 이벤트 -->
-  <script src="/js/board_detailForm.js" charset='euc-kr'></script>
+  <script src="/js/board_detailForm.js" charset='euc-kr' type="module"></script>
 
 </body>
 
