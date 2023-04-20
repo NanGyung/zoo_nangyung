@@ -1,9 +1,13 @@
 package com.project.zoopiter.web;
 
+import com.project.zoopiter.domain.common.file.svc.UploadFileSVC;
 import com.project.zoopiter.domain.entity.Member;
 import com.project.zoopiter.domain.entity.PetInfo;
+import com.project.zoopiter.domain.entity.UploadFile;
 import com.project.zoopiter.domain.member.svc.MemberSVC;
+import com.project.zoopiter.domain.petinfo.dto.PetInfoDTO;
 import com.project.zoopiter.domain.petinfo.svc.PetInfoSVC;
+import com.project.zoopiter.web.common.AttachFileType;
 import com.project.zoopiter.web.common.LoginMember;
 import com.project.zoopiter.web.form.member.DetailForm;
 import com.project.zoopiter.web.form.member.ModifyForm;
@@ -11,10 +15,10 @@ import com.project.zoopiter.web.form.pet.PetDetailForm;
 import com.project.zoopiter.web.form.pet.PetSaveForm;
 import com.project.zoopiter.web.form.pet.PetUpdateForm;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +36,18 @@ import java.util.Optional;
 public class PetInfoController {
   private final PetInfoSVC petInfoSVC;
   private final MemberSVC memberSVC;
+  private final UploadFileSVC uploadFileSVC;
 
+  // 반려동물 이미지번호 가져오기
+  @ModelAttribute("petInfos")
+  public List<PetInfoDTO> fidsOfPet(HttpServletRequest request){
+    HttpSession session = request.getSession(false);
+    if(session != null) {
+      LoginMember loginMember = (LoginMember)session.getAttribute(SessionConst.LOGIN_MEMBER);
+      return petInfoSVC.findPetByuserId(loginMember.getUserId());
+    }
+    return null;
+  }
   @GetMapping
   public String findAll(Model model, HttpServletRequest request
   ) {
@@ -60,38 +75,35 @@ public class PetInfoController {
     return "mypage/mypage_main";
   }
 
-  @ModelAttribute("petInfos")
-  public List<PetInfo> getPetInfo(HttpServletRequest request) {
-    List<PetInfo> petInfos = null;
-    HttpSession session = request.getSession(false);
-    if (session != null) {
-      Optional<LoginMember> loginMemberOpt = Optional.ofNullable((LoginMember) session.getAttribute(SessionConst.LOGIN_MEMBER));
-      if (loginMemberOpt.isPresent()) {
-        LoginMember loginMember = loginMemberOpt.get();
-        petInfos = petInfoSVC.findAll(loginMember.getUserId());
-      }
-    }
-    //이거 자꾸 로그인멤버 관련 오류남  ㅠㅠ
-    return petInfos;
-  }
+//  @ModelAttribute("petInfos")
+//  public List<PetInfo> getPetInfo(HttpServletRequest request) {
+//    List<PetInfo> petInfos = null;
+//    HttpSession session = request.getSession(false);
+//    if (session != null) {
+//      Optional<LoginMember> loginMemberOpt = Optional.ofNullable((LoginMember) session.getAttribute(SessionConst.LOGIN_MEMBER));
+//      if (loginMemberOpt.isPresent()) {
+//        LoginMember loginMember = loginMemberOpt.get();
+//        petInfos = petInfoSVC.findAll(loginMember.getUserId());
+//      }
+//    }
+//    return petInfos;
+//  }
 
   // 등록 pet_reg
-  // 등록양식
+  // 펫정보 등록양식
   @GetMapping("/petreg")
   public String saveInfo(Model model){
     PetSaveForm petSaveForm = new PetSaveForm();
     model.addAttribute("petSaveForm", petSaveForm);
-//    String save = petInfoSVC.saveInfo(petInfo);
 
     return "mypage/mypage_pet_reg";
   }
-  // 등록처리
-//  PetInfo saveInfo(PetInfo petInfo);
+  // 펫정보 등록처리
   @PostMapping("/petreg")
   public String save(
-          @Valid @ModelAttribute PetSaveForm petSaveForm,
-          BindingResult bindingResult,
-          RedirectAttributes redirectAttributes
+      @Valid @ModelAttribute PetSaveForm petSaveForm,
+      BindingResult bindingResult,
+      RedirectAttributes redirectAttributes
   ){
     log.info("petSaveForm={}",petSaveForm);
     // 데이터 검증
@@ -101,7 +113,7 @@ public class PetInfoController {
     }
 
     PetInfo petInfo = new PetInfo();
-    petInfo.setPetImg(petSaveForm.getPetImg());
+//    petInfo.setPetImg(petSaveForm.getPetImg());
     petInfo.setPetType(petSaveForm.getPetType());
     petInfo.setPetBirth(petSaveForm.getPetBirth());
     petInfo.setPetGender(petSaveForm.getPetGender());
@@ -110,22 +122,22 @@ public class PetInfoController {
     petInfo.setPetDate(petSaveForm.getPetDate());
     petInfo.setPetVac(petSaveForm.getPetVac());
     petInfo.setPetInfo(petSaveForm.getPetInfo());
-
     petInfo.setUserId(petSaveForm.getUserId());
 
-    String savedPetInfo = petInfoSVC.saveInfo(petInfo);
+    List<UploadFile> imageFiles = uploadFileSVC.convert(petSaveForm.getImageFiles(), AttachFileType.F0103);
+
+    String savedPetInfo = petInfoSVC.saveInfo(petInfo,imageFiles);
     redirectAttributes.addAttribute("userId", savedPetInfo);
-//    return "redirect:/mypage/pet/{userId}/detail";
-//    return "mypage/mypage_pet_modify";
+
     log.info("savedPetInfo={}",savedPetInfo);
     return "redirect:/mypage";
   }
 
-  // 조회
+  // 펫정보 조회
   @GetMapping("/{id}/detail")
   public String findInfo(
-          @PathVariable("id") Long id,
-          Model model
+      @PathVariable("id") Long id,
+      Model model
   ){
     Optional<PetInfo> findPetInfo = petInfoSVC.findInfo(id);
     PetInfo petInfo = findPetInfo.orElseThrow(() -> new RuntimeException("PetInfo not found for id: " + id));
@@ -143,18 +155,24 @@ public class PetInfoController {
     detailForm.setPetVac(petInfo.getPetVac());
     detailForm.setPetInfo(petInfo.getPetInfo());
 
-    model.addAttribute("detailForm",detailForm);
+    // 첨부파일 조회
+    List<UploadFile> imagedFiles = uploadFileSVC.findFilesByCodeWithRid(AttachFileType.F0103, id);
+    if(imagedFiles.size()>0){
+      log.info("ImagedFiles={}",imagedFiles);
+      model.addAttribute("imagedFiles",imagedFiles);
+    }
 
+    model.addAttribute("detailForm",detailForm);
     return "mypage/mypage_pet_detail";
   }
 
   // 수정 pet_modify > 메인으로 이동(보호자정보페이지)
 //  int updateInfo (Long PetNum, PetInfo petInfo);
-  // 수정양식
+  // 펫정보 수정양식
   @GetMapping("/{id}/edit")
   public String updateInfo(
-          @PathVariable("id") Long id,
-          Model model
+      @PathVariable("id") Long id,
+      Model model
   ){
     Optional<PetInfo> findPetInfo = petInfoSVC.findInfo(id);
     PetInfo petInfo = findPetInfo.orElseThrow();
@@ -172,18 +190,26 @@ public class PetInfoController {
     petUpdateForm.setPetVac(petInfo.getPetVac());
     petUpdateForm.setPetInfo(petInfo.getPetInfo());
 
+    // 첨부파일 조회
+    List<UploadFile> imagedFiles = uploadFileSVC.findFilesByCodeWithRid(AttachFileType.F0103, id);
+    if(imagedFiles.size()>0){
+      log.info("ImagedFiles={}",imagedFiles);
+      model.addAttribute("imagedFiles",imagedFiles);
+    }
+
     model.addAttribute("petUpdateForm",petUpdateForm);
 
     return "mypage/mypage_pet_modify";
   }
 
-  // 수정
+  // 펫정보 수정
+  @SneakyThrows
   @PostMapping("/{id}/edit")
   public String update(
-          @PathVariable("id") Long petNum,
-          @Valid @ModelAttribute PetUpdateForm petUpdateForm,
-          BindingResult bindingResult,
-          RedirectAttributes redirectAttributes
+      @PathVariable("id") Long petNum,
+      @Valid @ModelAttribute PetUpdateForm petUpdateForm,
+      BindingResult bindingResult,
+      RedirectAttributes redirectAttributes
   ){
     // 데이터 검증
     if(bindingResult.hasErrors()){
@@ -194,6 +220,7 @@ public class PetInfoController {
     PetInfo petInfo = new PetInfo();
     petInfo.setPetNum(petNum);
 
+
     petInfo.setPetImg(petUpdateForm.getPetImg());
     petInfo.setPetType(petUpdateForm.getPetType());
     petInfo.setPetBirth(petUpdateForm.getPetBirth());
@@ -203,13 +230,21 @@ public class PetInfoController {
     petInfo.setPetDate(petUpdateForm.getPetDate());
     petInfo.setPetVac(petUpdateForm.getPetVac());
     petInfo.setPetInfo(petUpdateForm.getPetInfo());
+    // 파일첨부
+    List<UploadFile> imagedFiles = uploadFileSVC.findFilesByCodeWithRid(AttachFileType.F0103, petNum);
+    if (imagedFiles.size() > 0) {
+      // 새로운 사진 파일이 있을 경우, 기존 사진 파일 삭제
+      uploadFileSVC.deleteFileByUploadFildId(imagedFiles.get(0).getUploadfileId());
 
-    String updatedPetInfo = String.valueOf(petInfoSVC.updateInfo(petNum, petInfo));
+      //넣기
+      List<UploadFile> imageFiles = uploadFileSVC.convert(petUpdateForm.getImageFiles(),AttachFileType.F0103);
+      petInfoSVC.updateInfo(petNum, petInfo, imageFiles);
+    }else {
+      List<UploadFile> imageFiles = uploadFileSVC.convert(petUpdateForm.getImageFiles(),AttachFileType.F0103);
+      petInfoSVC.updateInfo(petNum, petInfo, imageFiles);
+    }
     redirectAttributes.addAttribute("id",petNum);
     return "redirect:/mypage";
-//    petInfoSVC.updateInfo(petNum, petInfo);
-//    redirectAttributes.addAttribute("id", petNum);
-//    return "redirect:/mypage/pet/{id}/detail";
   }
 
   // 삭제 > 메인으로 이동(보호자정보페이지)
@@ -217,7 +252,7 @@ public class PetInfoController {
   @GetMapping("{id}/del")
   public String deleteInfo(@PathVariable("id") Long PetNum){
 //    log.info("petNum={}",PetNum);
-    petInfoSVC.deleteInfo(PetNum);
+    petInfoSVC.deleteInfo(PetNum,AttachFileType.F0103);
 
     return "redirect:/mypage";
   }
@@ -241,8 +276,8 @@ public class PetInfoController {
   // 회원수정
   @GetMapping("/memberedit")
   public String editForm(
-          Model model,
-          HttpServletRequest request
+      Model model,
+      HttpServletRequest request
   ) {
     String userId = null;
     HttpSession session = request.getSession(false);
@@ -319,12 +354,15 @@ public class PetInfoController {
   }
 
   // 회원탈퇴
-  @PostMapping("/withdraw")
-  public String withdraw(HttpServletRequest request,
-                         HttpServletResponse response){
-    String userId = (String)request.getSession().getAttribute("userId");
+  @GetMapping("/withdraw")
+  public void withdraw(HttpServletRequest request){
+    String userId = null;
+    HttpSession session = request.getSession(false);
+    if(session != null) {
+      LoginMember loginMember = (LoginMember)session.getAttribute(SessionConst.LOGIN_MEMBER);
+      userId = loginMember.getUserId();
+    }
     memberSVC.delete(userId);
     request.getSession().invalidate();
-    return "redirect:/";
   }
 }

@@ -71,8 +71,8 @@ insert into code (code_id,decode,pcode_id,useyn) values ('F0102','커뮤니티','B01
 --insert into code (code_id,decode,pcode_id,useyn) values ('F0103','회원프로필','F01','Y');
 
 --이건 은아님이 추가
-insert into code (code_id,decode,pcode_id,useyn) values ('F0103','회원프로필','M01','Y');
-
+insert into code (code_id,decode,pcode_id,useyn) values ('F0103','펫프로필','M01','Y');
+insert into code (code_id,decode,pcode_id,useyn) values ('F0104','회원프로필','M01','Y');
 --영훈이가 넣은거
 insert into code (code_id,decode,pcode_id,useyn) values ('F010201','병원후기일반','F01','Y');
 insert into code (code_id,decode,pcode_id,useyn) values ('F010202','병원후기이미지','F01','Y');
@@ -83,7 +83,7 @@ commit;
 ------------
 CREATE TABLE UPLOADFILE(
   UPLOADFILE_ID             NUMBER,          --파일 아이디(내부관리용)
-  CODE                      varchar2(11),    --분류 코드(커뮤니티: F0101, 병원후기: F0102, 회원프로필: F0103)
+  CODE                      varchar2(11),    --분류 코드(커뮤니티: F0101, 병원후기: F0102, 펫프로필: F0103, 회원프로필: F0104)
   RID                       varchar2(10),    --참조번호 --해당 첨부파일이 첨부된 게시글의 순번
   STORE_FILENAME            varchar2(50),    --보관파일명
   UPLOAD_FILENAME           varchar2(50),    --업로드파일명
@@ -156,9 +156,9 @@ commit;
 -------
 create table hmember (
     H_ID                   varchar2(20),   --로긴 아이디
---    H_PW                   varchar2(20),   --로긴 비밀번호
---    H_NAME                 varchar2(60),   --병원 상호명
---    H_EMAIL                varchar2(40),   --이메일
+    H_PW                   varchar2(20),   --로긴 비밀번호
+    H_NAME                 varchar2(60),   --병원 상호명
+    H_EMAIL                varchar2(40),   --이메일
     H_TEL                  varchar2(30),   --병원 연락처
     H_TIME                 clob,           --진료시간
     H_INFO                 varchar2(60),   --편의시설정보
@@ -341,7 +341,7 @@ CREATE TABLE PET_INFO(
 alter table PET_INFO add Constraint PET_INFO_PET_NUM_pk primary key (PET_NUM);
 --외래키
 alter table PET_INFO add constraint  PET_INFO_USER_ID_fk
-    foreign key(USER_ID) references member(USER_ID);
+    foreign key(USER_ID) references member(USER_ID) ON DELETE CASCADE;
 alter table PET_INFO add constraint  PET_INFO_PET_VAC_fk
     foreign key(PET_VAC) references  code(code_id);
 
@@ -408,7 +408,7 @@ CREATE TABLE PET_NOTE(
 alter table PET_NOTE add Constraint PET_NOTE_NOTE_NUM_pk primary key (NOTE_NUM);
 --외래키
 alter table PET_NOTE add constraint  PET_NOTE_USER_ID_fk
-    foreign key(USER_ID) references member(USER_ID);
+    foreign key(USER_ID) references member(USER_ID) ON DELETE CASCADE;
 alter table PET_NOTE add constraint  PET_NOTE_PET_VAC_fk
     foreign key(PET_VAC) references  code(code_id);
 
@@ -462,6 +462,7 @@ CREATE TABLE BBSH(
   BH_CONTENT         clob,            --글 내용
   PET_TYPE           varchar2(20),    --반려동물 품종
   BH_ATTACH          BLOB,            --첨부파일
+  BH_star            NUMBER,           --별점 (영훈추가)
   BH_HNAME           VARCHAR2(52),    --병원이름
   BH_HIT             NUMBER default 0,--조회수
   BH_GUBUN           VARCHAR2(15) default 'B0101',      --게시판 구분(병원후기: B0101, 커뮤니티: B0102)
@@ -510,7 +511,7 @@ CREATE TABLE C_BBSH(
 alter table C_BBSH add Constraint C_BBSH_HC_ID_pk primary key (HC_ID);
 --외래키
 alter table C_BBSH add constraint  C_BBSH_BBSH_ID_fk
-    foreign key(BBSH_ID) references BBSH(BBSH_ID);
+    foreign key(BBSH_ID) references BBSH(BBSH_ID) ON DELETE CASCADE;
 
 --제약조건
 alter table C_BBSH modify BBSH_ID constraint C_BBSH_BBSH_ID_nn not null;
@@ -588,7 +589,7 @@ CREATE TABLE C_BBSC(
 alter table C_BBSC add Constraint C_BBSC_CC_ID_pk primary key (CC_ID);
 --외래키
 alter table C_BBSC add constraint  C_BBSC_BBSC_ID_fk
-    foreign key(BBSC_ID) references BBSC(BBSC_ID);
+    foreign key(BBSC_ID) references BBSC(BBSC_ID) ON DELETE CASCADE;
 
 --제약조건
 alter table C_BBSC modify BBSC_ID constraint C_BBSC_BBSC_ID_nn not null;

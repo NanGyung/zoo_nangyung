@@ -205,13 +205,12 @@ public class MemberDAOImpl implements MemberDAO {
   /**
    * 탈퇴
    *
-   * @param userId 이메일
+   * @param userId 아이디
    */
   @Override
   public void delete(String userId) {
     StringBuffer sql = new StringBuffer();
-    sql.append("delete from member ");
-    sql.append(" where user_id = :userId ");
+    sql.append("delete from member where user_id = :userId ");
 
     Map<String, String> param = Map.of("userId", userId);
     template.update(sql.toString(), param);

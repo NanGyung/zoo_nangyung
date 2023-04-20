@@ -3,8 +3,11 @@ package com.project.zoopiter.web.form.pet;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class PetUpdateForm {
@@ -23,4 +26,10 @@ public class PetUpdateForm {
   @NotBlank
   private String petVac;  // 기초접종 여부
   private String petInfo; // 기타사항
+  // 이미지파일
+  private List<MultipartFile> imageFiles;
+
+  public PetUpdateForm() {
+    this.imageFiles = new ArrayList<>();
+  }
 }
