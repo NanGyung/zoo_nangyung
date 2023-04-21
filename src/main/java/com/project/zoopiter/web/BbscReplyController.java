@@ -24,7 +24,7 @@ public class BbscReplyController {
       @RequestBody BbscReply bbscReply,
       HttpServletRequest request
   ){
-    log.info("bbscReply={}",bbscReply);
+//    log.info("bbscReply={}",bbscReply);
     RestResponse<Object> res = null;
 
     HttpSession session = request.getSession(false);
@@ -37,6 +37,7 @@ public class BbscReplyController {
     // 댓글번호
     Long ccId = bbscReplySVC.save(bbscReply);
     res = RestResponse.createRestResponse("00","성공",ccId);
+    log.info("res={}",res);
 
     return res;
   }
@@ -50,6 +51,22 @@ public class BbscReplyController {
     RestResponse<Object> res = null;
     int cntOfDel = bbscReplySVC.deleteByCcid(ccId);
     res = RestResponse.createRestResponse("00","성공",cntOfDel);
+    log.info("res={}",res);
+
     return res;
+  }
+
+  //댓글 수정
+  @ResponseBody
+  @PatchMapping("/update/{ccId}")
+  public RestResponse<Object> update(
+      @PathVariable Long bbscId,
+      @RequestBody BbscReply bbscReply
+  ){
+    RestResponse<Object> res = null;
+    bbscReplySVC.updateByCcid(bbscId,bbscReply);
+
+
+    return ;
   }
 }

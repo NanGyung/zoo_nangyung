@@ -150,6 +150,7 @@
         <div class="input item1" th:each="reply : ${findedReplies}">
           <div class="comment__list">
             <article class="left">
+              <div id="ccId" th:field="${reply.ccId}" th:text="${reply.ccId}" style="display: none;"></div>
               <div th:text="${reply.userNick}" style="margin-bottom: 20px; font-weight: bold;">닉네임</div>
               <div th:text="${reply.ccContent}">
                 sample text
@@ -162,7 +163,7 @@
                   <div class="btn1"><button id="replyUpdateBtn1">수정</button></div>
                   <div class="btn2"><button id="replyDelBtn">삭제</button></div>
                 </div>
-                <div class="update" style="display: none;">
+                <div class="updateBtns" style="display: none;">
                   <div class="btn1"><button id="replyUpdateBtn2">확인</button></div>
                   <div class="btn2"><button id="replyCancleBtn">취소</button></div>
                 </div>

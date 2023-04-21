@@ -3,8 +3,9 @@ import { ajax } from '/js/ajax.js';
 const $bbscId = document.getElementById('bbscId');
 const $userNick = document.getElementById('userNick');
 const $ccContent = document.getElementById('ccContent');
+const $ccId = document.getElementById('ccId');
 
-// ¼öÁ¤ È­¸éÀ¸·Î °¡±â
+// ìˆ˜ì • í™”ë©´ìœ¼ë¡œ ê°€ê¸°
 const $modifyBtn = document.getElementById('modifyBtn');
 
 $modifyBtn?.addEventListener('click', e => {
@@ -12,21 +13,27 @@ $modifyBtn?.addEventListener('click', e => {
    location.href = url;
 });
 
-// »èÁ¦
+// ì‚­ì œ
 const $delBtn = document.getElementById('delBtn');
 $delBtn?.addEventListener('click', e => {
-  if(confirm('»èÁ¦ÇÏ½Ã°Ú½À´Ï±î?')){
+  if(confirm('ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?')){
     const url = `/bbsc/${$bbscId.value}/del`;
     location.href = url;
   }
 });
 
-//´ñ±Û µî·Ï¹öÆ°
+//ëŒ“ê¸€ ë“±ë¡ë²„íŠ¼
 const $addBtn = document.getElementById('addBtn');
-//´ñ±Û Ãë¼Ò¹öÆ°
+//ëŒ“ê¸€ ì·¨ì†Œë²„íŠ¼
 const $cancelBtn = document.getElementById('cancelBtn');
 
-//´ñ±Û µî·Ï
+// íŽ˜ì´ì§€ ìƒˆë¡œê³ ì¹¨
+function resetPage(){
+    const url = `/bbsc/${$bbscId.value}/detail`;
+    location.href= url;
+}
+
+//ëŒ“ê¸€ ë“±ë¡
 const add_h = e => {
    $ccContent.disabled == false;
    const url = '/api/bbscReply/save';
@@ -37,12 +44,8 @@ const add_h = e => {
    };
     ajax
        .post(url, payLoad)
-       .then(res => {
-                if(res.header.rtcd == '00'){
-                    confirm('´ñ±Û µî·Ï¿Ï·á!');
-                    res.json();
-                }
-        })
+       .then(res => res.json())
+       .then(resetPage)
        .catch(console.error); //err=>console.error(err)
        return;
 
@@ -50,9 +53,24 @@ const add_h = e => {
 
 $addBtn.addEventListener('click',add_h,false);
 
-//´ñ±Û µî·ÏÃë¼Ò
+//ëŒ“ê¸€ ë“±ë¡ì·¨ì†Œ
 $cancelBtn.addEventListener('click',e => {
    $ccContent.disabled == true;
     $ccContent.textContent = '';
 },false);
+
+//ëŒ“ê¸€ ì‚­ì œë²„íŠ¼
+const $replyDelBtn = document.getElementById('replyDelBtn');
+const del_h = e => {
+    const url = `/api/bbscReply/del/${$ccId.textContent}`;
+     if(confirm('ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?')){
+        ajax
+            .delete(url)
+            .then(res => res.json)
+            .then(resetPage)
+            .error(console.error);
+     }
+
+}
+$replyDelBtn.addEventListener('click', del_h, false);
 

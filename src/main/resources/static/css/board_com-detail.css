@@ -387,6 +387,13 @@ p {
  justify-content: flex-end;
 }
 
+.comment__btn #replyUpdateBtn1,
+.comment__btn #replyDelBtn {
+    background-color: var(--color-grey1);
+    border: 1px solid var(--color-grey1);
+    opacity: .8;
+}
+
 .comment__btn .btn1 {
   margin-right: 10px;
 }
