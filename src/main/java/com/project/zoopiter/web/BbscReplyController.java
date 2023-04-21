@@ -37,7 +37,7 @@ public class BbscReplyController {
     // 댓글번호
     Long ccId = bbscReplySVC.save(bbscReply);
     res = RestResponse.createRestResponse("00","성공",ccId);
-    log.info("res={}",res);
+//    log.info("res={}",res);
 
     return res;
   }
@@ -51,22 +51,22 @@ public class BbscReplyController {
     RestResponse<Object> res = null;
     int cntOfDel = bbscReplySVC.deleteByCcid(ccId);
     res = RestResponse.createRestResponse("00","성공",cntOfDel);
-    log.info("res={}",res);
+//    log.info("res={}",res);
 
     return res;
   }
 
   //댓글 수정
   @ResponseBody
-  @PatchMapping("/update/{ccId}")
+  @PatchMapping("/update/{bbscId}")
   public RestResponse<Object> update(
       @PathVariable Long bbscId,
       @RequestBody BbscReply bbscReply
   ){
     RestResponse<Object> res = null;
-    bbscReplySVC.updateByCcid(bbscId,bbscReply);
-
-
-    return ;
+    int cntOfUpdate = bbscReplySVC.updateByCcid(bbscId, bbscReply);
+    res = RestResponse.createRestResponse("00","성공",cntOfUpdate);
+    log.info("res={}",res);
+    return res;
   }
 }

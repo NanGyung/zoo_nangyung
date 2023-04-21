@@ -153,11 +153,11 @@ public class BbscDAOImpl implements BbscDAO{
   }
 
   private StringBuffer dynamicQuery(BbscFilterCondition filterCondition, StringBuffer sql){
-    String[] petTypes = filterCondition.getCategory();
-    if(petTypes.length > 0){
-      for(int i = 0; i < petTypes.length; i++){
-        sql.append(" '" + petTypes[i] + "' ");
-        if(i != petTypes.length - 1){
+    List<String> petTypes = filterCondition.getCategory();
+    if(petTypes.size() > 0){
+      for(int i = 0; i < petTypes.size(); i++){
+        sql.append(" '" + petTypes.get(i)  + "' ");
+        if(i != petTypes.size() - 1){
           sql.append(", ");
         }
       }

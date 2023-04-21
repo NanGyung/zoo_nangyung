@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -29,7 +30,10 @@ class BbscDAOImplTest {
   @Test
   @DisplayName("펫태그 검색")
   void findbyPetTypes() {
-    String[] arr= {"기타","소동물"};
+    List<String> arr = new ArrayList<>();
+    arr.add("기타");
+    arr.add("소동물");
+//    String[] arr= {"기타","소동물"};
     BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 11, "");
     List<Bbsc> byPetType = bbscDAO.findByPetType(filterCondition);
     log.info("byPetType={}",byPetType);
@@ -38,7 +42,10 @@ class BbscDAOImplTest {
   @Test
   @DisplayName("펫태그 게시글 건수")
   void totalCountByPetType() {
-    String[] arr= {"기타","소동물"};
+//    String[] arr= {"기타","소동물"};
+    List<String> arr = new ArrayList<>();
+    arr.add("기타");
+    arr.add("소동물");
     BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 11, "");
     int cntOfFindedPetType = bbscDAO.totalCount(filterCondition);
     log.info("cntOfFindedPetType={}",cntOfFindedPetType);
@@ -47,7 +54,8 @@ class BbscDAOImplTest {
   @Test
   @DisplayName("필터 검색")
   void findByFilter(){
-    String[] arr= {};
+//    String[] arr= {};
+    List<String> arr = new ArrayList<>();
     String filter1 = "bcHit";
     String filter2 = "bcUdate";
     BbscFilterCondition bcHit = new BbscFilterCondition(arr, 1, 10, filter1);
@@ -70,7 +78,10 @@ class BbscDAOImplTest {
   @Test
   @DisplayName("전체 검색(펫필터,레코드번호)")
   void findAll2(){
-    String[] arr= {"기타","소동물"};
+//    String[] arr= {"기타","소동물"};
+    List<String> arr = new ArrayList<>();
+    arr.add("기타");
+    arr.add("소동물");
     BbscFilterCondition filterCondition = new BbscFilterCondition(arr, 1, 12, "");
     List<Bbsc> findedAll = bbscDAO.findAll(filterCondition,1, 5);
     log.info("findedAll={}",findedAll);

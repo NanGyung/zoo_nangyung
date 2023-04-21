@@ -42,7 +42,7 @@ class BbscReplyDAOImplTest {
   @DisplayName("댓글수정")
   void updateByRnum() {
     BbscReply bbscReply = new BbscReply();
-    bbscReply.setCcId(2L);
+    bbscReply.setCcId(21L);
     bbscReply.setCcContent("수정수정 고양이 짱 귀여워요 지구뿌쎠!");
     int cntOfUpdate = bbscReplyDAO.updateByCcid(2L, bbscReply);
     Assertions.assertThat(cntOfUpdate).isEqualTo(1);
